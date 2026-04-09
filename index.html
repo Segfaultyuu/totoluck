@@ -58,39 +58,111 @@
     .hx-anim { animation: hexReveal 0.4s ease forwards; opacity:0; transform-origin:left; }
     @keyframes resultFadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .result-anim { animation: resultFadeIn 0.6s ease forwards; opacity:0; }
+    /* Mobile drawer */
+    #mobileDrawer { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+    #mobileDrawer.open { transform: translateX(0); }
+    #drawerBackdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    #drawerBackdrop.open { opacity: 1; pointer-events: auto; }
+    .drawer-tab { display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:12px; color:#404943; transition:background 0.15s, color 0.15s; font-size:15px; font-weight:500; }
+    .drawer-tab:hover { background:#ecefea; }
+    .drawer-tab.active { background:#004b31; color:white; }
+    .drawer-tab.active svg { stroke:white; }
   </style>
 </head>
 <body>
 
 <!-- Top Navigation -->
-<nav class="fixed top-0 left-0 right-0 z-50 h-20 flex items-center justify-between px-8
+<nav class="fixed top-0 left-0 right-0 z-50 h-20 flex items-center justify-between px-4 sm:px-6 md:px-8
             bg-[rgba(248,250,245,0.85)] backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,26,0.06)]">
-  <div class="font-headline text-2xl font-bold italic text-[#004b36]">Jade &amp; Prosperity</div>
-  <div class="hidden md:flex items-center gap-8">
-    <a href="#" onclick="showTab('toto');return false;" id="tab-toto" class="nav-tab active text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_totoLuck">TOTO Luck</a>
-    <a href="#" onclick="showTab('meihua');return false;" id="tab-meihua" class="nav-tab text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_meihua">梅花易数</a>
-    <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_baZi">Ba Zi Analysis</a>
-    <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_dailyRituals">Daily Rituals</a>
-  </div>
-  <div class="flex items-center gap-3">
-    <div class="flex items-center gap-0.5 bg-[#ecefea] rounded-full p-1">
-      <button onclick="setLang('en')" id="lang-en" class="lang-btn text-xs font-bold px-3 py-1.5 rounded-full">EN</button>
-      <button onclick="setLang('zh')" id="lang-zh" class="lang-btn text-xs font-bold px-3 py-1.5 rounded-full">中文</button>
-      <button onclick="setLang('ms')" id="lang-ms" class="lang-btn text-xs font-bold px-3 py-1.5 rounded-full">BM</button>
+  <div class="flex items-center gap-7 min-w-0">
+    <div class="font-headline text-sm sm:text-xl md:text-2xl font-bold italic text-[#004b36] leading-tight shrink-0">Jade &amp; Prosperity</div>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#" onclick="showTab('toto');return false;" id="tab-toto" class="nav-tab active text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_totoLuck">TOTO Luck</a>
+      <a href="#" onclick="showTab('meihua');return false;" id="tab-meihua" class="nav-tab text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_meihua">梅花易数</a>
+      <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_baZi">Ba Zi Analysis</a>
+      <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_dailyRituals">Daily Rituals</a>
     </div>
-    <button class="w-8 h-8 rounded-full bg-[#004b31] flex items-center justify-center text-white text-sm font-bold" id="userBtn">—</button>
+  </div>
+  <div class="shrink-0 flex items-center gap-2 sm:gap-3">
+    <div class="flex items-center gap-0.5 bg-[#ecefea] rounded-full p-0.5 sm:p-1 whitespace-nowrap">
+      <button onclick="setLang('en')" id="lang-en" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">EN</button>
+      <button onclick="setLang('zh')" id="lang-zh" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">中文</button>
+      <button onclick="setLang('ms')" id="lang-ms" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">BM</button>
+    </div>
+    <button onclick="toggleMobileMenu()" id="userBtn" aria-label="Menu"
+            class="relative w-8 h-8 md:w-[38px] md:h-[38px] rounded-full overflow-hidden shrink-0 focus:outline-none">
+      <img id="avatarImg" src="" alt="avatar" class="w-full h-full object-cover">
+      <div id="closeOverlay" class="hidden absolute inset-0 bg-[rgba(0,43,28,0.72)] flex items-center justify-center">
+        <svg class="w-4 h-4" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    </button>
   </div>
 </nav>
 
-<!-- Sidebar -->
-<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-screen w-72 bg-[#f2f4ef] pt-24 pb-6 px-6 z-40">
-  <div class="flex items-center gap-4 mb-8">
-    <div class="w-12 h-12 rounded-full bg-[#004b31] flex items-center justify-center text-[#bcedda] text-lg font-bold chinese-char shrink-0" id="sidebarAvatar">林</div>
-    <div>
-      <p class="font-headline text-lg font-bold text-[#004b36]" id="sidebarName">Master Lin</p>
-      <p class="text-[11px] font-normal uppercase tracking-[1.1px] text-[#404943]" id="sidebarPhase">Wood Dragon Phase</p>
+<!-- Mobile drawer backdrop -->
+<div id="drawerBackdrop" onclick="toggleMobileMenu()" class="fixed inset-0 z-[60] bg-[rgba(25,28,26,0.45)] backdrop-blur-sm"></div>
+
+<!-- Mobile slide-in drawer -->
+<div id="mobileDrawer" class="fixed top-0 right-0 h-full w-72 z-[70] bg-[#f8faf5] shadow-[−20px_0_60px_rgba(25,28,26,0.18)] flex flex-col pt-6 pb-8 px-5">
+  <!-- Close row -->
+  <div class="flex items-center justify-between mb-6 px-1">
+    <span class="font-headline text-base font-bold italic text-[#004b36]">Jade &amp; Prosperity</span>
+    <button onclick="toggleMobileMenu()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#ecefea] transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="#404943" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Profile card -->
+  <div class="flex items-center gap-3 mb-6 px-[10px] py-3 bg-[#ecefea] rounded-2xl">
+    <div class="w-11 h-11 rounded-full overflow-hidden shrink-0" id="drawerAvatar">
+      <img id="drawerAvatarImg" src="" alt="avatar" class="w-full h-full object-cover">
+    </div>
+    <div class="min-w-0">
+      <p class="font-headline text-sm font-bold text-[#004b36] truncate" id="drawerName">Master Lin</p>
+      <p class="text-[10px] font-normal uppercase tracking-[1.1px] text-[#404943] truncate" id="drawerPhase">Wood Dragon Phase</p>
     </div>
   </div>
+
+  <!-- Tab links -->
+  <p class="text-[10px] font-bold uppercase tracking-widest text-[#9eaa9e] px-2 mb-2" data-i18n="sidebar_navigation">Navigation</p>
+  <nav class="flex flex-col gap-1">
+    <a href="#" id="mtab-toto" onclick="showTab('toto');toggleMobileMenu();return false;" class="drawer-tab active">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span data-i18n="nav_totoLuck">TOTO Luck</span>
+    </a>
+    <a href="#" id="mtab-meihua" onclick="showTab('meihua');toggleMobileMenu();return false;" class="drawer-tab">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 0 10A5 5 0 0 1 12 2z"/><path d="M12 12c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>
+      <span data-i18n="nav_meihua">梅花易数</span>
+    </a>
+    <a href="#" class="drawer-tab">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span data-i18n="nav_baZi">Ba Zi Analysis</span>
+    </a>
+    <a href="#" class="drawer-tab">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span data-i18n="nav_dailyRituals">Daily Rituals</span>
+    </a>
+  </nav>
+
+  <!-- Divider -->
+  <div class="my-6 border-t border-[#e0e4df]"></div>
+
+  <!-- Language switcher -->
+  <p class="text-[10px] font-bold uppercase tracking-widest text-[#9eaa9e] px-2 mb-3" data-i18n="sidebar_language">Language</p>
+  <div class="flex items-center gap-1.5 px-1">
+    <button onclick="setLang('en')" id="mlang-en" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">EN</button>
+    <button onclick="setLang('zh')" id="mlang-zh" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">中文</button>
+    <button onclick="setLang('ms')" id="mlang-ms" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">BM</button>
+  </div>
+
+  <!-- Bottom brand -->
+  <div class="mt-auto px-1">
+    <p class="text-[10px] text-[#9eaa9e] leading-relaxed">Jade &amp; Prosperity · Fortune &amp; Destiny</p>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-screen w-72 bg-[#f2f4ef] pt-24 pb-6 px-6 z-40">
   <nav class="flex flex-col gap-2">
     <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-xl text-[#404943] hover:bg-[#ecefea] transition-all">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -574,6 +646,7 @@
 const TRANSLATIONS = {
   en: {
     nav_luckPortal:'Luck Portal', nav_totoLuck:'TOTO Luck', nav_baZi:'Ba Zi Analysis', nav_dailyRituals:'Daily Rituals',
+    sidebar_navigation:'Navigation', sidebar_language:'Language',
     sidebar_dashboard:'Dashboard', sidebar_bazi:'Personal Ba Zi', sidebar_fengShui:'Feng Shui',
     sidebar_bookConsult:'Book Consultation', sidebar_settings:'⚙ Settings', sidebar_support:'? Support',
     sidebar_masterName:'Master Lin', sidebar_phase:'Wood Dragon Phase',
@@ -758,6 +831,7 @@ const TRANSLATIONS = {
   },
   zh: {
     nav_luckPortal:'运势门户', nav_totoLuck:'TOTO 运气', nav_baZi:'八字分析', nav_dailyRituals:'日常仪式',
+    sidebar_navigation:'导航', sidebar_language:'语言',
     sidebar_dashboard:'总览', sidebar_bazi:'个人八字', sidebar_fengShui:'风水',
     sidebar_bookConsult:'预约咨询', sidebar_settings:'⚙ 设置', sidebar_support:'? 支持',
     sidebar_masterName:'林大师', sidebar_phase:'木龙运程',
@@ -936,6 +1010,7 @@ const TRANSLATIONS = {
   },
   ms: {
     nav_luckPortal:'Portal Nasib', nav_totoLuck:'Tuah TOTO', nav_baZi:'Analisis Ba Zi', nav_dailyRituals:'Ritual Harian',
+    sidebar_navigation:'Navigasi', sidebar_language:'Bahasa',
     sidebar_dashboard:'Papan Pemuka', sidebar_bazi:'Ba Zi Peribadi', sidebar_fengShui:'Feng Shui',
     sidebar_bookConsult:'Tempah Perundingan', sidebar_settings:'⚙ Tetapan', sidebar_support:'? Sokongan',
     sidebar_masterName:'Guru Lin', sidebar_phase:'Fasa Naga Kayu',
@@ -1130,7 +1205,10 @@ function t(key) {
 function setLang(lang) {
   currentLang = lang;
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
-  ['en','zh','ms'].forEach(l => document.getElementById('lang-'+l).classList.toggle('active', l === lang));
+  ['en','zh','ms'].forEach(l => {
+    document.getElementById('lang-'+l).classList.toggle('active', l === lang);
+    document.getElementById('mlang-'+l).classList.toggle('active', l === lang);
+  });
   applyLang();
 }
 
@@ -1146,8 +1224,8 @@ function applyLang() {
 
   // Sidebar: only update if user hasn't entered a name
   if (!currentUserName) {
-    document.getElementById('sidebarName').textContent = t('sidebar_masterName');
-    document.getElementById('sidebarPhase').textContent = t('sidebar_phase');
+    document.getElementById('drawerName').textContent  = t('sidebar_masterName');
+    document.getElementById('drawerPhase').textContent = t('sidebar_phase');
   }
 
   // Re-render dynamic content if calculation exists
@@ -1166,9 +1244,10 @@ function applyLang() {
     document.getElementById('dayMasterLabel').textContent = t('ft_strengthLabel')
       .replace('{yy}', t('yy_'+dm.yinYang)).replace('{el}', t('el_'+dm.element)).replace('{strength}', t('strength_'+s));
     const yp = currentPillars[0];
-    document.getElementById('sidebarPhase').textContent = t('phase_template')
+    const _phaseText = t('phase_template')
       .replace('{el}', t('el_'+yp.element)).replace('{animal}', t('animal_'+yp.animal))
       .replace('{yy}', t('yy_'+dm.yinYang)).replace('{dayEl}', t('el_'+dm.element));
+    document.getElementById('drawerPhase').textContent  = _phaseText;
     if (!document.getElementById('elementInteraction').classList.contains('hidden')) {
       renderElementDynamics(currentElements, dm.element);
     }
@@ -1537,14 +1616,14 @@ function calculate() {
 
   if (name) {
     currentUserName = name;
-    document.getElementById('sidebarName').textContent = name;
-    document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase();
-    document.getElementById('userBtn').textContent = name.charAt(0).toUpperCase();
+    const initials = name.charAt(0).toUpperCase();
+    document.getElementById('drawerName').textContent    = name;
   }
 
-  document.getElementById('sidebarPhase').textContent = t('phase_template')
+  const _calcPhase = t('phase_template')
     .replace('{el}', t('el_'+yp.element)).replace('{animal}', t('animal_'+yp.animal))
     .replace('{yy}', t('yy_'+dp.yinYang)).replace('{dayEl}', t('el_'+dp.element));
+  document.getElementById('drawerPhase').textContent  = _calcPhase;
 
   renderPillars(pillars);
   renderElements(counts);
@@ -1586,8 +1665,27 @@ function showTab(tab) {
   document.getElementById('meihuaSection').classList.toggle('hidden', tab !== 'meihua');
   document.getElementById('tab-toto').classList.toggle('active', tab === 'toto');
   document.getElementById('tab-meihua').classList.toggle('active', tab === 'meihua');
+  document.getElementById('mtab-toto').classList.toggle('active', tab === 'toto');
+  document.getElementById('mtab-meihua').classList.toggle('active', tab === 'meihua');
   if (tab === 'meihua') updateMeihuaClock();
 }
+
+let mobileMenuOpen = false;
+function toggleMobileMenu() {
+  mobileMenuOpen = !mobileMenuOpen;
+  document.getElementById('mobileDrawer').classList.toggle('open', mobileMenuOpen);
+  document.getElementById('drawerBackdrop').classList.toggle('open', mobileMenuOpen);
+  document.getElementById('closeOverlay').classList.toggle('hidden', !mobileMenuOpen);
+  document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+}
+
+// Anime avatar on load (DiceBear avataaars) — shared seed for both nav & drawer
+(function() {
+  const seed = Math.random().toString(36).slice(2, 10);
+  const src  = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&skin=pale,light,tanned,yellow`;
+  document.getElementById('avatarImg').src = src;
+  document.getElementById('drawerAvatarImg').src = src;
+})();
 
 // ═══════════════════════════════════════════════════════
 //  梅花易数 ENGINE
