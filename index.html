@@ -46,9 +46,6 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .lang-btn { color: #404943; transition: all 0.2s; }
     .lang-btn.active { background: #004b31 !important; color: white; }
-    .nav-tab { position: relative; transition: all 0.2s; }
-    .nav-tab.active { color: #004b36 !important; font-weight: 600; }
-    .nav-tab.active::after { content:''; position:absolute; bottom:-6px; left:0; right:0; height:2px; background:#735c00; border-radius:2px; }
     /* Hexagram line styles */
     .hx-yang { height:5px; background:#004b31; border-radius:3px; }
     .hx-yin  { display:flex; gap:6px; }
@@ -58,142 +55,25 @@
     .hx-anim { animation: hexReveal 0.4s ease forwards; opacity:0; transform-origin:left; }
     @keyframes resultFadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .result-anim { animation: resultFadeIn 0.6s ease forwards; opacity:0; }
-    /* Mobile drawer */
-    #mobileDrawer { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
-    #mobileDrawer.open { transform: translateX(0); }
-    #drawerBackdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-    #drawerBackdrop.open { opacity: 1; pointer-events: auto; }
-    .drawer-tab { display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:12px; color:#404943; transition:background 0.15s, color 0.15s; font-size:15px; font-weight:500; }
-    .drawer-tab:hover { background:#ecefea; }
-    .drawer-tab.active { background:#004b31; color:white; }
-    .drawer-tab.active svg { stroke:white; }
   </style>
 </head>
 <body>
 
 <!-- Top Navigation -->
-<nav class="fixed top-0 left-0 right-0 z-50 h-20 flex items-center justify-between px-4 sm:px-6 md:px-8
-            bg-[rgba(248,250,245,0.85)] backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,26,0.06)]">
-  <div class="flex items-center gap-7 min-w-0">
-    <div class="font-headline text-sm sm:text-xl md:text-2xl font-bold italic text-[#004b36] leading-tight shrink-0">Jade &amp; Prosperity</div>
-    <div class="hidden md:flex items-center gap-8">
-      <a href="#" onclick="showTab('toto');return false;" id="tab-toto" class="nav-tab active text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_totoLuck">TOTO Luck</a>
-      <a href="#" onclick="showTab('meihua');return false;" id="tab-meihua" class="nav-tab text-[#404943] text-base hover:text-[#00321f]" data-i18n="nav_meihua">梅花易数</a>
-      <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_baZi">Ba Zi Analysis</a>
-      <a href="#" class="text-[#404943] text-base hover:text-[#00321f] transition-colors" data-i18n="nav_dailyRituals">Daily Rituals</a>
-    </div>
-  </div>
-  <div class="shrink-0 flex items-center gap-2 sm:gap-3">
-    <div class="flex items-center gap-0.5 bg-[#ecefea] rounded-full p-0.5 sm:p-1 whitespace-nowrap">
-      <button onclick="setLang('en')" id="lang-en" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">EN</button>
-      <button onclick="setLang('zh')" id="lang-zh" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">中文</button>
-      <button onclick="setLang('ms')" id="lang-ms" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">BM</button>
-    </div>
-    <button onclick="toggleMobileMenu()" id="userBtn" aria-label="Menu"
-            class="relative w-8 h-8 md:w-[38px] md:h-[38px] rounded-full overflow-hidden shrink-0 focus:outline-none">
-      <img id="avatarImg" src="" alt="avatar" class="w-full h-full object-cover">
-      <div id="closeOverlay" class="hidden absolute inset-0 bg-[rgba(0,43,28,0.72)] flex items-center justify-center">
-        <svg class="w-4 h-4" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </div>
-    </button>
+<nav class="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 sm:px-6 md:px-10
+            bg-[rgba(248,250,245,0.92)] backdrop-blur-xl shadow-[0_4px_24px_rgba(25,28,26,0.07)]">
+  <div class="font-headline text-base sm:text-xl font-bold italic text-[#004b36] leading-tight">Jade &amp; Prosperity</div>
+  <div class="flex items-center gap-0.5 bg-[#ecefea] rounded-full p-0.5 sm:p-1 whitespace-nowrap">
+    <button onclick="setLang('en')" id="lang-en" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">EN</button>
+    <button onclick="setLang('zh')" id="lang-zh" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">中文</button>
+    <button onclick="setLang('ms')" id="lang-ms" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">BM</button>
   </div>
 </nav>
 
-<!-- Mobile drawer backdrop -->
-<div id="drawerBackdrop" onclick="toggleMobileMenu()" class="fixed inset-0 z-[60] bg-[rgba(25,28,26,0.45)] backdrop-blur-sm"></div>
 
-<!-- Mobile slide-in drawer -->
-<div id="mobileDrawer" class="fixed top-0 right-0 h-full w-72 z-[70] bg-[#f8faf5] shadow-[−20px_0_60px_rgba(25,28,26,0.18)] flex flex-col pt-6 pb-8 px-5">
-  <!-- Close row -->
-  <div class="flex items-center justify-between mb-6 px-1">
-    <span class="font-headline text-base font-bold italic text-[#004b36]">Jade &amp; Prosperity</span>
-    <button onclick="toggleMobileMenu()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#ecefea] transition-colors">
-      <svg class="w-4 h-4" fill="none" stroke="#404943" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-
-  <!-- Profile card -->
-  <div class="flex items-center gap-3 mb-6 px-[10px] py-3 bg-[#ecefea] rounded-2xl">
-    <div class="w-11 h-11 rounded-full overflow-hidden shrink-0" id="drawerAvatar">
-      <img id="drawerAvatarImg" src="" alt="avatar" class="w-full h-full object-cover">
-    </div>
-    <div class="min-w-0">
-      <p class="font-headline text-sm font-bold text-[#004b36] truncate" id="drawerName">Master Lin</p>
-      <p class="text-[10px] font-normal uppercase tracking-[1.1px] text-[#404943] truncate" id="drawerPhase">Wood Dragon Phase</p>
-    </div>
-  </div>
-
-  <!-- Tab links -->
-  <p class="text-[10px] font-bold uppercase tracking-widest text-[#9eaa9e] px-2 mb-2" data-i18n="sidebar_navigation">Navigation</p>
-  <nav class="flex flex-col gap-1">
-    <a href="#" id="mtab-toto" onclick="showTab('toto');toggleMobileMenu();return false;" class="drawer-tab active">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      <span data-i18n="nav_totoLuck">TOTO Luck</span>
-    </a>
-    <a href="#" id="mtab-meihua" onclick="showTab('meihua');toggleMobileMenu();return false;" class="drawer-tab">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 0 10A5 5 0 0 1 12 2z"/><path d="M12 12c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>
-      <span data-i18n="nav_meihua">梅花易数</span>
-    </a>
-    <a href="#" class="drawer-tab">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span data-i18n="nav_baZi">Ba Zi Analysis</span>
-    </a>
-    <a href="#" class="drawer-tab">
-      <svg class="w-5 h-5 shrink-0" fill="none" stroke="#404943" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span data-i18n="nav_dailyRituals">Daily Rituals</span>
-    </a>
-  </nav>
-
-  <!-- Divider -->
-  <div class="my-6 border-t border-[#e0e4df]"></div>
-
-  <!-- Language switcher -->
-  <p class="text-[10px] font-bold uppercase tracking-widest text-[#9eaa9e] px-2 mb-3" data-i18n="sidebar_language">Language</p>
-  <div class="flex items-center gap-1.5 px-1">
-    <button onclick="setLang('en')" id="mlang-en" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">EN</button>
-    <button onclick="setLang('zh')" id="mlang-zh" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">中文</button>
-    <button onclick="setLang('ms')" id="mlang-ms" class="lang-btn flex-1 text-xs font-bold py-2 rounded-full bg-[#ecefea] text-center">BM</button>
-  </div>
-
-  <!-- Bottom brand -->
-  <div class="mt-auto px-1">
-    <p class="text-[10px] text-[#9eaa9e] leading-relaxed">Jade &amp; Prosperity · Fortune &amp; Destiny</p>
-  </div>
-</div>
-
-<!-- Sidebar -->
-<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-screen w-72 bg-[#f2f4ef] pt-24 pb-6 px-6 z-40">
-  <nav class="flex flex-col gap-2">
-    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-xl text-[#404943] hover:bg-[#ecefea] transition-all">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="sidebar_dashboard">Dashboard</span>
-    </a>
-    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-xl bg-white shadow-sm text-[#004b36]">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="nav_totoLuck">TOTO Luck</span>
-    </a>
-    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-xl text-[#404943] hover:bg-[#ecefea] transition-all">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="sidebar_bazi">Personal Ba Zi</span>
-    </a>
-    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-xl text-[#404943] hover:bg-[#ecefea] transition-all">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span class="text-[11px] font-medium uppercase tracking-[1.1px]" data-i18n="sidebar_fengShui">Feng Shui</span>
-    </a>
-  </nav>
-  <div class="mt-auto flex flex-col gap-4">
-    <button class="w-full bg-[#004b31] text-[#bcedda] py-3 rounded-xl font-semibold text-sm tracking-wide text-center hover:opacity-90 transition-opacity" data-i18n="sidebar_bookConsult">
-      Book Consultation
-    </button>
-    <div class="flex flex-col gap-1">
-      <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#404943] hover:text-[#004b36] text-xs transition-colors" data-i18n="sidebar_settings">⚙ Settings</a>
-      <a href="#" class="flex items-center gap-3 px-3 py-2 text-[#404943] hover:text-[#004b36] text-xs transition-colors" data-i18n="sidebar_support">? Support</a>
-    </div>
-  </div>
-</aside>
 
 <!-- Main -->
-<main class="pt-20 lg:pl-72 min-h-screen">
+<main class="pt-16 min-h-screen">
 
 <!-- ══ TOTO LUCK SECTION ══ -->
 <div id="totoSection">
@@ -290,6 +170,37 @@
           </div>
         </div>
 
+        <!-- 偏财 Wealth Star Card -->
+        <div class="rounded-3xl p-6 hidden flex-col gap-4" id="biancaiCard">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" id="biancaiIconBg" style="background:#735c00">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 12h1"/><path d="M15 12h1"/></svg>
+            </div>
+            <div>
+              <h4 class="font-headline text-base font-bold leading-tight" id="biancaiTitle"></h4>
+              <p class="text-[9px] uppercase tracking-wider opacity-50" id="biancaiSubtitle"></p>
+            </div>
+          </div>
+          <!-- Today pillar row -->
+          <div class="bg-white rounded-xl p-3 flex items-center justify-between gap-2" id="biancaiPillarRow">
+            <div>
+              <p class="text-[9px] font-bold uppercase tracking-wider text-[#404943] mb-0.5" id="biancaiPillarLabel"></p>
+              <p class="font-headline font-bold text-[#00321f] text-xl" id="biancaiPillarValue"></p>
+            </div>
+            <div class="text-right">
+              <p class="text-[9px] font-bold uppercase tracking-wider text-[#404943] mb-0.5" id="biancaiStarLabel"></p>
+              <p class="font-bold text-sm" id="biancaiStarValue"></p>
+            </div>
+          </div>
+          <!-- Verdict -->
+          <div class="rounded-2xl p-4 flex flex-col gap-1.5" id="biancaiVerdict"></div>
+          <!-- Lucky hours -->
+          <div id="biancaiHoursSection" class="hidden flex-col gap-2">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-[#404943]" id="biancaiHoursLabel"></p>
+            <div id="biancaiHoursList" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
       </section>
 
       <!-- Right Column -->
@@ -347,282 +258,6 @@
     </div>
   </div>
 </div><!-- /totoSection -->
-
-<!-- ══ MEIHUA SECTION ══ -->
-<div id="meihuaSection" class="hidden">
-  <div class="max-w-[1152px] mx-auto px-6 py-12 flex flex-col gap-10">
-
-    <!-- Hero Banner -->
-    <section class="relative rounded-3xl overflow-hidden jade-grad px-12 py-10 flex items-center gap-10">
-      <div class="absolute inset-0 opacity-10" style="background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22300%22><text x=%2220%22 y=%22200%22 font-size=%22180%22 fill=%22%23bcedda%22 opacity=%220.15%22>梅</text><text x=%22300%22 y=%22260%22 font-size=%22120%22 fill=%22%23ffe088%22 opacity=%220.1%22>☯</text></svg>') center/cover"></div>
-      <div class="relative z-10 flex-1">
-        <span class="inline-block bg-[#ffe088] text-[#241a00] text-[11px] font-bold uppercase tracking-[2.2px] px-4 py-1 rounded-full mb-4" data-i18n="mh_banner_badge">Song Dynasty Oracle</span>
-        <h1 class="font-headline text-5xl font-bold text-white leading-tight" id="mh-hero-title">梅花易数<br/><span class="text-[#bcedda] text-2xl font-normal italic">Plum Blossom Divination</span></h1>
-        <p class="text-[#bcedda] text-base mt-3 leading-relaxed max-w-lg" data-i18n="mh_banner_desc">邵康节先生所创，以先天易数起卦，通过体用生克关系，洞察事物发展脉络，预测吉凶祸福。</p>
-      </div>
-      <div class="relative z-10 hidden lg:flex flex-col items-center gap-2">
-        <div class="text-[80px] leading-none opacity-60">☰</div>
-        <div class="text-[#ffe088] text-xs tracking-widest uppercase" data-i18n="mh_heaven_earth">Heaven &amp; Earth</div>
-      </div>
-    </section>
-
-    <!-- Main Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-      <!-- Left: Input Panel -->
-      <div class="lg:col-span-4 flex flex-col gap-6">
-
-        <!-- Method Tabs -->
-        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-6">
-          <h3 class="font-headline text-xl font-bold text-[#00321f] flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <span data-i18n="mh_methodTitle">起卦方式</span>
-          </h3>
-          <!-- Method selector -->
-          <div class="flex gap-2">
-            <button onclick="setMeihuaMethod('time')" id="mh-method-time"
-              class="mh-method-btn flex-1 py-2.5 rounded-xl text-xs font-bold tracking-wider border-2 transition-all border-[#004b31] bg-[#004b31] text-white" data-i18n="mh_method_time">
-              时间起卦
-            </button>
-            <button onclick="setMeihuaMethod('number')" id="mh-method-number"
-              class="mh-method-btn flex-1 py-2.5 rounded-xl text-xs font-bold tracking-wider border-2 transition-all border-[#ecefea] text-[#404943] bg-[#ecefea]" data-i18n="mh_method_number">
-              数字起卦
-            </button>
-            <button onclick="setMeihuaMethod('object')" id="mh-method-object"
-              class="mh-method-btn flex-1 py-2.5 rounded-xl text-xs font-bold tracking-wider border-2 transition-all border-[#ecefea] text-[#404943] bg-[#ecefea]" data-i18n="mh_method_object">
-              万物起卦
-            </button>
-          </div>
-
-          <!-- Time method -->
-          <div id="mh-input-time" class="flex flex-col gap-4">
-            <div class="bg-[#f2f4ef] rounded-2xl p-4 flex flex-col gap-2">
-              <p class="text-[10px] font-bold uppercase tracking-widest text-[#404944]" data-i18n="mh_timeAutoLabel">当前时间自动取数</p>
-              <p class="font-headline text-lg font-bold text-[#00321f]" id="mh-time-display">—</p>
-              <p class="text-[11px] text-[#404943]" id="mh-time-numbers" data-i18n="mh_timeNumbersLabel">年数 + 月数 + 日数 + 时数</p>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_questionLabel">所问之事</label>
-              <input class="input-field" id="mh-question-time" placeholder="请输入所求问的事项..." type="text"/>
-            </div>
-          </div>
-
-          <!-- Number method -->
-          <div id="mh-input-number" class="hidden flex-col gap-4">
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]"><span data-i18n="mh_upperNumLabel">上卦数</span> <span class="normal-case font-normal opacity-60" data-i18n="mh_anyPosInt">(任意正整数)</span></label>
-              <input class="input-field" id="mh-upper-num" placeholder="例：7" type="number" min="1"/>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]"><span data-i18n="mh_lowerNumLabel">下卦数</span> <span class="normal-case font-normal opacity-60" data-i18n="mh_anyPosInt">(任意正整数)</span></label>
-              <input class="input-field" id="mh-lower-num" placeholder="例：3" type="number" min="1"/>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]"><span data-i18n="mh_lineNumLabel">动爻数</span> <span class="normal-case font-normal opacity-60">(1-6)</span></label>
-              <input class="input-field" id="mh-line-num" placeholder="例：5" type="number" min="1" max="6"/>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_questionLabel">所问之事</label>
-              <input class="input-field" id="mh-question-number" placeholder="请输入所求问的事项..." type="text"/>
-            </div>
-          </div>
-
-          <!-- Object method -->
-          <div id="mh-input-object" class="hidden flex-col gap-4">
-            <div class="bg-[#fff3c4] border border-[#ffe088] rounded-2xl p-4 text-sm text-[#574500] leading-relaxed">
-              <p class="font-bold mb-1" data-i18n="mh_objectMethodTitle">万物类象起卦法</p>
-              <span data-i18n="mh_objectMethodDesc">观察眼前之物，数其数量取上卦，再数动态之物取下卦，两数相加除以6取余为动爻。</span>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_staticCountLabel">静物数量 (上卦)</label>
-              <input class="input-field" id="mh-obj-upper" placeholder="例：窗格数 12" type="number" min="1"/>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_dynamicCountLabel">动态数量 (下卦)</label>
-              <input class="input-field" id="mh-obj-lower" placeholder="例：飞鸟数 5" type="number" min="1"/>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_questionLabel">所问之事</label>
-              <input class="input-field" id="mh-question-object" placeholder="请输入所求问的事项..." type="text"/>
-            </div>
-          </div>
-
-          <div id="mh-error" class="hidden text-[#ba1a1a] text-sm font-medium bg-[#ffdad6] rounded-lg px-4 py-2"></div>
-
-          <button onclick="castMeihua()"
-            class="w-full jade-grad-btn text-white py-4 rounded-xl font-bold text-[12px] uppercase tracking-[1.4px]
-                   hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-            </svg>
-            <span data-i18n="mh_castBtn">占卜起卦</span>
-          </button>
-        </div>
-
-        <!-- Eight Trigrams Reference -->
-        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-6 flex flex-col gap-4">
-          <h4 class="font-headline text-base font-bold text-[#00321f]" data-i18n="mh_trigramRef">先天八卦数</h4>
-          <div class="grid grid-cols-4 gap-2" id="mh-trigram-grid">
-            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">乾</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_1">1・天</div></div>
-            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">兑</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_2">2・泽</div></div>
-            <div class="bg-[#ffdad6] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#ba1a1a]">离</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_3">3・火</div></div>
-            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">震</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_4">4・雷</div></div>
-            <div class="bg-[#dcf5ec] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#004b31]">巽</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_5">5・风</div></div>
-            <div class="bg-[#dbeafe] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#1d4ed8]">坎</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_6">6・水</div></div>
-            <div class="bg-[#fff3c4] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#735c00]">艮</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_7">7・山</div></div>
-            <div class="bg-[#fff3c4] rounded-xl p-3 text-center"><div class="chinese-char text-lg text-[#735c00]">坤</div><div class="text-[10px] text-[#404944] mt-1" data-i18n="mh_tri_8">8・地</div></div>
-          </div>
-          <p class="text-[11px] text-[#404943] leading-relaxed" data-i18n="mh_trigramFormula">上卦 = 总数 ÷ 8 取余（余0用8）<br/>动爻 = 总数 ÷ 6 取余（余0用6）</p>
-        </div>
-      </div><!-- /left -->
-
-      <!-- Right: Results -->
-      <div class="lg:col-span-8 flex flex-col gap-8" id="mh-results-area">
-
-        <!-- Placeholder -->
-        <div id="mh-placeholder" class="flex flex-col items-center justify-center min-h-[400px] bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] gap-6 py-16">
-          <div class="text-8xl opacity-20">☯</div>
-          <p class="text-[#404943] text-base" data-i18n="mh_placeholderText">起卦后，卦象与解析将在此处显示</p>
-          <p class="text-[#404943] text-sm opacity-60" data-i18n="mh_placeholderSub">Cast a hexagram to reveal the oracle reading</p>
-        </div>
-
-        <!-- Result (hidden until cast) -->
-        <div id="mh-result" class="hidden flex-col gap-8">
-
-          <!-- Question display -->
-          <div class="bg-[#004b31] rounded-2xl px-6 py-4 flex items-center gap-4">
-            <svg class="w-5 h-5 text-[#ffe088] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <div>
-              <p class="text-[10px] text-[#bcedda] uppercase tracking-widest" data-i18n="mh_questionLabel">所问之事</p>
-              <p class="text-white font-semibold" id="mh-question-display">—</p>
-            </div>
-            <div class="ml-auto text-right">
-              <p class="text-[10px] text-[#bcedda] uppercase tracking-widest" data-i18n="mh_castTimeLabel">起卦时间</p>
-              <p class="text-white text-sm font-mono" id="mh-cast-time">—</p>
-            </div>
-          </div>
-
-          <!-- Three Hexagrams Row -->
-          <div class="grid grid-cols-3 gap-4">
-            <!-- 本卦 -->
-            <div class="rounded-3xl p-1 jade-grad shadow-xl result-anim" style="animation-delay:0.1s">
-              <div class="bg-[rgba(0,50,31,0.93)] rounded-[22px] p-6 flex flex-col items-center gap-4 h-full">
-                <div class="text-[10px] font-bold uppercase tracking-[2px] text-[#bcedda]" data-i18n="mh_benHexLabel">本 卦</div>
-                <div id="mh-hex-benkua" class="flex flex-col gap-2.5 w-20"></div>
-                <div class="text-center">
-                  <div class="font-headline text-2xl font-bold text-[#ffe088]" id="mh-benkua-name">—</div>
-                  <div class="text-[11px] text-[#bcedda] mt-1" id="mh-benkua-keyword">—</div>
-                </div>
-                <div class="w-full h-px bg-[rgba(188,237,218,0.15)]"></div>
-                <div class="text-center">
-                  <p class="text-[10px] text-[#bcedda] uppercase tracking-widest mb-1" data-i18n="mh_changingLineLabel">动爻</p>
-                  <div class="w-8 h-8 rounded-full bg-[#c8850a] flex items-center justify-center text-white font-bold text-sm" id="mh-changing-line">—</div>
-                </div>
-              </div>
-            </div>
-            <!-- 互卦 -->
-            <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.2)] p-6 flex flex-col items-center gap-4 result-anim" style="animation-delay:0.2s">
-              <div class="text-[10px] font-bold uppercase tracking-[2px] text-[#404944]" data-i18n="mh_nuHexLabel">互 卦</div>
-              <div id="mh-hex-hukua" class="flex flex-col gap-2.5 w-20"></div>
-              <div class="text-center">
-                <div class="font-headline text-xl font-bold text-[#00321f]" id="mh-hukua-name">—</div>
-                <div class="text-[11px] text-[#404944] mt-1" id="mh-hukua-keyword">—</div>
-              </div>
-              <div class="w-full h-px bg-[#ecefea]"></div>
-              <p class="text-[11px] text-[#404943] text-center" data-i18n="mh_nuHexDesc">事物内部<br/>隐含动向</p>
-            </div>
-            <!-- 变卦 -->
-            <div class="bg-[#f2f4ef] rounded-3xl p-6 flex flex-col items-center gap-4 result-anim" style="animation-delay:0.3s">
-              <div class="text-[10px] font-bold uppercase tracking-[2px] text-[#404944]" data-i18n="mh_bianHexLabel">变 卦</div>
-              <div id="mh-hex-biankua" class="flex flex-col gap-2.5 w-20"></div>
-              <div class="text-center">
-                <div class="font-headline text-xl font-bold text-[#00321f]" id="mh-biankua-name">—</div>
-                <div class="text-[11px] text-[#404944] mt-1" id="mh-biankua-keyword">—</div>
-              </div>
-              <div class="w-full h-px bg-[#ecefea]"></div>
-              <p class="text-[11px] text-[#404943] text-center" data-i18n="mh_bianHexDesc">事物发展<br/>最终走向</p>
-            </div>
-          </div>
-
-          <!-- 体用分析 -->
-          <div class="rounded-3xl p-1 bg-gradient-to-br from-[#735c00] to-[#c8850a] shadow-xl result-anim" style="animation-delay:0.4s">
-            <div class="bg-[rgba(36,26,0,0.92)] rounded-[22px] p-8 flex flex-col gap-6">
-              <div class="flex items-center justify-between">
-                <h4 class="font-headline text-2xl font-bold text-[#ffe088]" data-i18n="mh_tiyongTitle">体用生克分析</h4>
-                <div class="px-4 py-1.5 rounded-full text-sm font-bold" id="mh-fortune-badge" style="background:#ffe088;color:#241a00">—</div>
-              </div>
-              <div class="grid grid-cols-2 gap-6">
-                <div class="flex flex-col gap-3">
-                  <p class="text-[10px] text-[rgba(255,224,136,0.6)] uppercase tracking-widest" data-i18n="mh_tiLabel">体卦（代表问卜者）</p>
-                  <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center chinese-char text-2xl" id="mh-ti-icon" style="background:rgba(255,255,255,0.1);color:#ffe088">—</div>
-                    <div>
-                      <div class="font-bold text-white" id="mh-ti-name">—</div>
-                      <div class="text-[11px] text-[rgba(188,237,218,0.7)]" id="mh-ti-element">—</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col gap-3">
-                  <p class="text-[10px] text-[rgba(255,224,136,0.6)] uppercase tracking-widest" data-i18n="mh_yongLabel">用卦（代表所问之事）</p>
-                  <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center chinese-char text-2xl" id="mh-yong-icon" style="background:rgba(255,255,255,0.1);color:#ffe088">—</div>
-                    <div>
-                      <div class="font-bold text-white" id="mh-yong-name">—</div>
-                      <div class="text-[11px] text-[rgba(188,237,218,0.7)]" id="mh-yong-element">—</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="bg-[rgba(255,255,255,0.06)] rounded-2xl p-5">
-                <div class="flex items-center gap-3 mb-3">
-                  <div class="text-xl" id="mh-relation-icon">⚡</div>
-                  <div class="font-headline text-lg font-bold text-[#ffe088]" id="mh-relation-label">—</div>
-                </div>
-                <p class="text-[#bcedda] text-sm leading-relaxed" id="mh-relation-desc">—</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 详细解读 -->
-          <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-6 result-anim" style="animation-delay:0.5s">
-            <h4 class="font-headline text-xl font-bold text-[#00321f] flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-              <span data-i18n="mh_hexDetailTitle">卦象详解</span>
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-[#f2f4ef] rounded-2xl p-5 flex flex-col gap-2">
-                <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_benHexInterpLabel">本卦解读</p>
-                <p class="text-[#004b36] font-headline text-base font-bold" id="mh-benkua-full-name">—</p>
-                <p class="text-sm text-[#404943] leading-relaxed" id="mh-benkua-meaning">—</p>
-              </div>
-              <div class="bg-[#f2f4ef] rounded-2xl p-5 flex flex-col gap-2">
-                <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_bianHexTrendLabel">变卦走向</p>
-                <p class="text-[#004b36] font-headline text-base font-bold" id="mh-biankua-full-name">—</p>
-                <p class="text-sm text-[#404943] leading-relaxed" id="mh-biankua-meaning">—</p>
-              </div>
-            </div>
-            <div class="border-t border-[#ecefea] pt-5 flex flex-col gap-3">
-              <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="mh_summaryLabel">综合断语</p>
-              <p class="text-[#004b36] text-base leading-relaxed font-medium" id="mh-summary">—</p>
-            </div>
-            <!-- 五行生克图 -->
-            <div class="border-t border-[#ecefea] pt-5">
-              <p class="text-[10px] font-bold uppercase tracking-[1.1px] text-[#404944] mb-4" data-i18n="mh_yaoAnalysisLabel">爻位卦气分析</p>
-              <div class="grid grid-cols-6 gap-2" id="mh-yao-grid"></div>
-            </div>
-          </div>
-
-          <!-- Domain Readings (六亲/六神 simplified) -->
-          <div class="bg-[#004b31] rounded-3xl p-8 flex flex-col gap-5 result-anim" style="animation-delay:0.6s">
-            <h4 class="font-headline text-xl font-bold text-[#ffe088]" data-i18n="mh_domainsTitle">各领域指引</h4>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="mh-domains"></div>
-          </div>
-
-        </div><!-- /mh-result -->
-      </div><!-- /right -->
-    </div>
-  </div>
-</div><!-- /meihuaSection -->
 
 </main>
 
@@ -697,6 +332,19 @@ const TRANSLATIONS = {
     ft_balanced_Water:'Your Water intelligence navigates life with grace and fluidity.',
     ft_weak_Water:'Replenish your Water with Metal discipline and structured rest.',
     phase_template:'{el} {animal} · {yy} {dayEl}',
+    // ── 偏财 Wealth Star ──
+    biancai_title:"Today's Wealth Star",
+    biancai_subtitle:'偏財 · Side Wealth Analysis',
+    biancai_today_pillars:"Today's Day Pillar",
+    biancai_star_active:'Wealth Star Active',
+    biancai_star_absent:'Wealth Star Absent',
+    biancai_recommend_buy:'★ Auspicious! Side Wealth star is aligned — buy TOTO today!',
+    biancai_no_buy:'Save your resources. Wait for a stronger wealth day.',
+    biancai_lucky_hours:'Lucky Buying Hours',
+    biancai_day_piancai:"Today's day pillar carries 偏財 (Side Wealth) — windfall luck is present.",
+    biancai_month_piancai:"This month carries 偏財 energy — moderate windfall luck this period.",
+    biancai_zhengcai_day:"Today brings 正財 (Direct Wealth) — steady gains favored, not windfall.",
+    biancai_no_wealth:'No wealth star is active in today\'s chart.',
     footer_scholarPath:"The Scholar's Path", footer_privacy:'Privacy Policy',
     footer_lunar:'Lunar Calendar', footer_terms:'Terms of Service',
     footer_copyright:'© 2024 Jade & Prosperity Metaphysics. All Rights Reserved.',
@@ -733,7 +381,6 @@ const TRANSLATIONS = {
     mh_defaultQuestion:'General Fortune',
     mh_changingLineTpl:'Line {n}',
     mh_hexFullNameTpl:'Hexagram {num} · {name} ({upper} above {lower})',
-    nav_meihua:'Plum Blossom',
     mh_triName:{1:'Qian',2:'Dui',3:'Li',4:'Zhen',5:'Xun',6:'Kan',7:'Gen',8:'Kun'},
     mh_yaoLabels:['Line 1','Line 2','Line 3','Line 4','Line 5','Line 6'],
     mh_yaoRoles:['Foundation','Growth','Threshold','Outer shift','Core event','Extreme turn'],
@@ -882,6 +529,19 @@ const TRANSLATIONS = {
     ft_balanced_Water:'您的水系智慧以优雅和流动驾驭人生。',
     ft_weak_Water:'以金系纪律和规律休息补充您的水气。',
     phase_template:'{el}{animal}年 · {yy}{dayEl}',
+    // ── 偏财 ──
+    biancai_title:'今日偏财运势',
+    biancai_subtitle:'偏财星 · 旺财分析',
+    biancai_today_pillars:'今日日柱',
+    biancai_star_active:'偏财星当令',
+    biancai_star_absent:'偏财星未现',
+    biancai_recommend_buy:'★ 吉！今日偏财星当令，宜购买TOTO碰运气！',
+    biancai_no_buy:'今日偏财运不旺，建议暂缓购彩，守财为上。',
+    biancai_lucky_hours:'旺财时段',
+    biancai_day_piancai:'今日日柱带偏财星，偏财运旺，宜把握机会。',
+    biancai_month_piancai:'本月月柱带偏财气息，月内偏财运有所加持。',
+    biancai_zhengcai_day:'今日日柱为正财星，宜稳健理财，不宜博彩。',
+    biancai_no_wealth:'今日财星未现，宜守财待机，暂缓购彩。',
     footer_scholarPath:'学者之路', footer_privacy:'隐私政策',
     footer_lunar:'农历日历', footer_terms:'服务条款',
     footer_copyright:'© 2024 翠玉兴旺玄学。版权所有。',
@@ -913,7 +573,6 @@ const TRANSLATIONS = {
     mh_defaultQuestion:'综合运势',
     mh_changingLineTpl:'第{n}爻',
     mh_hexFullNameTpl:'第{num}卦 · {name}（{upper}上{lower}下）',
-    nav_meihua:'梅花易数',
     mh_triName:{1:'乾',2:'兑',3:'离',4:'震',5:'巽',6:'坎',7:'艮',8:'坤'},
     mh_yaoLabels:['初爻','二爻','三爻','四爻','五爻','上爻'],
     mh_yaoRoles:['初生基础','成长蓄力','内外交界','外事变动','主事核心','极端转化'],
@@ -1061,6 +720,19 @@ const TRANSLATIONS = {
     ft_balanced_Water:'Kecerdasan Air anda mengemudi kehidupan dengan anggun dan lancar.',
     ft_weak_Water:'Isi semula Air anda dengan disiplin Logam dan rehat berstruktur.',
     phase_template:'{el} {animal} · {yy} {dayEl}',
+    // ── Pian Cai ──
+    biancai_title:'Bintang Kekayaan Hari Ini',
+    biancai_subtitle:'偏財 · Analisis Kekayaan Sampingan',
+    biancai_today_pillars:'Tiang Hari Ini',
+    biancai_star_active:'Bintang Kekayaan Aktif',
+    biancai_star_absent:'Tiada Bintang Kekayaan',
+    biancai_recommend_buy:'★ Tuah Baik! Bintang 偏財 aktif — beli TOTO hari ini!',
+    biancai_no_buy:'Simpan sumber anda. Tunggu hari kekayaan yang lebih kuat.',
+    biancai_lucky_hours:'Waktu Membeli Bertuah',
+    biancai_day_piancai:'Tiang hari ini membawa 偏財 (Kekayaan Sampingan) — tuah wang sampingan hadir.',
+    biancai_month_piancai:'Bulan ini membawa tenaga 偏財 — tuah kekayaan sederhana dalam tempoh ini.',
+    biancai_zhengcai_day:'Hari ini membawa 正財 (Kekayaan Langsung) — keuntungan tetap diutamakan.',
+    biancai_no_wealth:'Tiada bintang kekayaan aktif dalam carta hari ini.',
     footer_scholarPath:'Laluan Sarjana', footer_privacy:'Dasar Privasi',
     footer_lunar:'Kalendar Lunar', footer_terms:'Syarat Perkhidmatan',
     footer_copyright:'© 2024 Jade & Prosperity Metaphysics. Hak Cipta Terpelihara.',
@@ -1097,7 +769,6 @@ const TRANSLATIONS = {
     mh_defaultQuestion:'Nasib Umum',
     mh_changingLineTpl:'Garisan {n}',
     mh_hexFullNameTpl:'Heksagram {num} · {name} ({upper} atas {lower})',
-    nav_meihua:'Bunga Plum',
     mh_triName:{1:'Qian',2:'Dui',3:'Li',4:'Zhen',5:'Xun',6:'Kan',7:'Gen',8:'Kun'},
     mh_yaoLabels:['Garisan 1','Garisan 2','Garisan 3','Garisan 4','Garisan 5','Garisan 6'],
     mh_yaoRoles:['Asas','Pertumbuhan','Ambang','Anjakan luar','Peristiwa inti','Titik ekstrem'],
@@ -1196,7 +867,6 @@ const TRANSLATIONS = {
 
 let currentLang = 'en';
 let currentUserName = null;
-let currentMeihuaData = null;
 
 function t(key) {
   return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.en[key] || key;
@@ -1207,7 +877,6 @@ function setLang(lang) {
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
   ['en','zh','ms'].forEach(l => {
     document.getElementById('lang-'+l).classList.toggle('active', l === lang);
-    document.getElementById('mlang-'+l).classList.toggle('active', l === lang);
   });
   applyLang();
 }
@@ -1222,10 +891,10 @@ function applyLang() {
   // Hero title (contains HTML)
   document.getElementById('heroTitle').innerHTML = t('hero_title');
 
-  // Sidebar: only update if user hasn't entered a name
+  // Profile: only update if user hasn't entered a name
   if (!currentUserName) {
-    document.getElementById('drawerName').textContent  = t('sidebar_masterName');
-    document.getElementById('drawerPhase').textContent = t('sidebar_phase');
+    document.getElementById('drawerName')?.textContent  && (document.getElementById('drawerName').textContent = t('sidebar_masterName'));
+    document.getElementById('drawerPhase')?.textContent && (document.getElementById('drawerPhase').textContent = t('sidebar_phase'));
   }
 
   // Re-render dynamic content if calculation exists
@@ -1247,7 +916,7 @@ function applyLang() {
     const _phaseText = t('phase_template')
       .replace('{el}', t('el_'+yp.element)).replace('{animal}', t('animal_'+yp.animal))
       .replace('{yy}', t('yy_'+dm.yinYang)).replace('{dayEl}', t('el_'+dm.element));
-    document.getElementById('drawerPhase').textContent  = _phaseText;
+    document.getElementById('drawerPhase')?.textContent && (document.getElementById('drawerPhase').textContent = _phaseText);
     if (!document.getElementById('elementInteraction').classList.contains('hidden')) {
       renderElementDynamics(currentElements, dm.element);
     }
@@ -1257,12 +926,11 @@ function applyLang() {
     document.getElementById('manifestSubtitle').textContent = t('manifest_subtitle');
   }
 
-  // Re-render meihua result if visible
-  if (currentMeihuaData && !document.getElementById('mh-result').classList.contains('hidden')) {
-    // Recalculate relation so labels use new language
-    currentMeihuaData.relation = mhRelation(currentMeihuaData.tiEl, currentMeihuaData.yongEl);
-    renderMeihuaResult(currentMeihuaData);
+  // Re-render biancai card if visible
+  if (lastBiancaiResult) {
+    renderBiancaiCard(lastBiancaiResult);
   }
+
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1379,20 +1047,68 @@ function favorableElements(elemCounts, dayEl) {
 }
 
 let realignSeed = 0;
+
+// Singapore timezone helper — returns a Date in SGT (UTC+8)
+function sgtNow() {
+  const now = new Date();
+  return new Date(now.getTime() + (480 + now.getTimezoneOffset()) * 60000);
+}
+
 function luckyNumbers(pillars, elemCounts) {
   const dayEl  = pillars[2].element;
   const favEls = favorableElements(elemCounts, dayEl);
-  const seed   = pillars.reduce((a, p) => a + p.stemIdx * 7 + p.branchIdx * 13, realignSeed * 37);
-  const pool = [];
+
+  // ── Today's date & pillars (Singapore time) ──
+  const sgt    = sgtNow();
+  const tY = sgt.getFullYear(), tM = sgt.getMonth() + 1, tD = sgt.getDate();
+  const tH = sgt.getHours();
+
+  const todayYP = yearPillar(tY, tM, tD);
+  const todayMP = monthPillar(tY, tM, tD, todayYP.stemIdx);
+  const todayDP = dayPillar(tY, tM, tD);
+  const todayHP = hourPillar(tH, 0, todayDP.stemIdx);
+
+  // ── Seed: birth chart × today's date × realign ──
+  // Changes every day for the same person
+  const birthSeed = pillars.reduce((a, p) => a + p.stemIdx * 7 + p.branchIdx * 13, 0);
+  const dateSeed  = tY * 10000 + tM * 100 + tD;
+  const todaySeed = todayDP.stemIdx * 17 + todayDP.branchIdx * 31
+                  + todayMP.stemIdx * 53 + todayHP.stemIdx * 11;
+  const seed = Math.imul(birthSeed + 1, dateSeed) + todaySeed * 97 + realignSeed * 37;
+
+  // ── Element weighting ──
   const weights = { Wood:1, Fire:1, Earth:1, Metal:1, Water:1 };
-  favEls.forEach(el => { if (el) weights[el] = 4; });
-  weights[dayEl] = 2;
-  const unFav = [EL_CONTROLLED_BY[dayEl]];
-  unFav.forEach(el => { weights[el] = Math.max(0.5, weights[el] * 0.5); });
+
+  // Birth-chart favorable elements
+  favEls.forEach(el => { if (el) weights[el] += 3; });
+  weights[dayEl] += 1;
+
+  // Reduce unfavorable element (the one that controls Day Master)
+  weights[EL_CONTROLLED_BY[dayEl]] *= 0.5;
+
+  // ── Today's pillar interactions (daily-changing influence) ──
+  const todayDayEl   = todayDP.element;
+  const todayMonthEl = todayMP.element;
+  const todayHourEl  = todayHP.element;
+  const wealthEl = Object.entries(EL_CONTROLLED_BY).find(([k,v]) => v === dayEl)?.[0];
+
+  // Today's day element = what DM controls → wealth energy, strong boost
+  if (todayDayEl === wealthEl)         weights[todayDayEl] += 3;
+  // Today's day element produces DM → resource energy, moderate boost
+  if (EL_PRODUCES[todayDayEl] === dayEl) weights[todayDayEl] += 2;
+  // Month & hour add lighter touches
+  if (todayMonthEl === wealthEl)       weights[todayMonthEl] += 1.5;
+  if (todayHourEl === wealthEl)        weights[todayHourEl]  += 1;
+  // Today's branch element also adds flavour
+  weights[todayDP.branchElement] += 0.5;
+
+  // ── Build weighted pool and shuffle ──
+  const pool = [];
   Object.entries(EL_NUMBERS).forEach(([el, nums]) => {
-    const w = Math.round(weights[el] * 3);
+    const w = Math.max(1, Math.round(weights[el] * 3));
     for (let i = 0; i < w; i++) pool.push(...nums);
   });
+
   const shuffled = shuffle(pool, seed);
   const picked = new Set();
   for (const n of shuffled) {
@@ -1441,6 +1157,145 @@ function fortuneText(pillars, elemCounts) {
     .replace('{strength}',t('strength_' + capStr));
 
   return { desc: sentence, strengthLabel };
+}
+
+// ═══════════════════════════════════════════════════════
+//  偏财 (SIDE WEALTH / WINDFALL) ENGINE
+// ═══════════════════════════════════════════════════════
+
+// Returns the element that the given element controls (克)
+// e.g. Wood controls Earth, Fire controls Metal, etc.
+function dmControlsEl(dayEl) {
+  return Object.entries(EL_CONTROLLED_BY).find(([k, v]) => v === dayEl)?.[0];
+}
+
+// Returns 'piancai' | 'zhengcai' | 'other'
+// 偏财 = Day Master controls target element, SAME yin-yang polarity
+// 正财 = Day Master controls target element, DIFFERENT yin-yang polarity
+function wealthGodOf(userDayStemIdx, targetStemIdx) {
+  const dmEl     = STEM_EL[userDayStemIdx];
+  const dmYY     = STEM_YY[userDayStemIdx];
+  const tEl      = STEM_EL[targetStemIdx];
+  const tYY      = STEM_YY[targetStemIdx];
+  const wealthEl = dmControlsEl(dmEl);
+  if (tEl !== wealthEl) return 'other';
+  return dmYY === tYY ? 'piancai' : 'zhengcai';
+}
+
+// Convert earthly branch index (0-11) to time range string
+function branchToHourRange(bi) {
+  if (bi === 0) return '23:00–01:00';
+  const start = bi * 2 - 1;
+  const end   = bi * 2 + 1;
+  return `${String(start).padStart(2,'0')}:00–${String(end).padStart(2,'0')}:00`;
+}
+
+function checkTodayBiancai(userDayStemIdx) {
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth() + 1, d = now.getDate();
+
+  const todayYP = yearPillar(y, m, d);
+  const todayMP = monthPillar(y, m, d, todayYP.stemIdx);
+  const todayDP = dayPillar(y, m, d);
+
+  const dayGod   = wealthGodOf(userDayStemIdx, todayDP.stemIdx);
+  const monthGod = wealthGodOf(userDayStemIdx, todayMP.stemIdx);
+
+  // Find all 偏财 hours in today (iterate all 12 earthly branches)
+  const piancaiHours = [];
+  for (let bi = 0; bi < 12; bi++) {
+    const stemBase = (todayDP.stemIdx % 5) * 2;
+    const si = (stemBase + bi) % 10;
+    if (wealthGodOf(userDayStemIdx, si) === 'piancai') {
+      piancaiHours.push({ bi, si, range: branchToHourRange(bi) });
+    }
+  }
+
+  return { dayGod, monthGod, piancaiHours, todayDP, todayMP };
+}
+
+let lastBiancaiResult = null;
+
+function renderBiancaiCard(result) {
+  lastBiancaiResult = result;
+  const card = document.getElementById('biancaiCard');
+  card.classList.remove('hidden');
+  card.classList.add('flex');
+
+  document.getElementById('biancaiTitle').textContent    = t('biancai_title');
+  document.getElementById('biancaiSubtitle').textContent = t('biancai_subtitle');
+  document.getElementById('biancaiPillarLabel').textContent = t('biancai_today_pillars');
+  document.getElementById('biancaiHoursLabel').textContent  = t('biancai_lucky_hours');
+
+  const { dayGod, monthGod, piancaiHours, todayDP } = result;
+  const hasPiancai = dayGod === 'piancai' || monthGod === 'piancai';
+
+  // Today's pillar glyph
+  document.getElementById('biancaiPillarValue').textContent = `${todayDP.stem}${todayDP.branch}`;
+
+  // Star status
+  const starLabel = document.getElementById('biancaiStarLabel');
+  const starValue = document.getElementById('biancaiStarValue');
+  if (dayGod === 'piancai') {
+    starLabel.textContent = t('biancai_star_active');
+    starLabel.style.color = '#004b31';
+    starValue.textContent = '偏財 ★';
+    starValue.style.color = '#735c00';
+  } else if (dayGod === 'zhengcai') {
+    starLabel.textContent = t('biancai_star_absent');
+    starLabel.style.color = '#404943';
+    starValue.textContent = '正財';
+    starValue.style.color = '#404943';
+  } else if (monthGod === 'piancai') {
+    starLabel.textContent = t('biancai_star_active');
+    starLabel.style.color = '#004b31';
+    starValue.textContent = '偏財 (月) ★';
+    starValue.style.color = '#735c00';
+  } else {
+    starLabel.textContent = t('biancai_star_absent');
+    starLabel.style.color = '#9eaa9e';
+    starValue.textContent = '—';
+    starValue.style.color = '#9eaa9e';
+  }
+
+  // Card background & verdict block
+  const verdict = document.getElementById('biancaiVerdict');
+  const iconBg  = document.getElementById('biancaiIconBg');
+  if (hasPiancai) {
+    card.style.background = '#dcf5ec';
+    iconBg.style.background = '#004b31';
+    verdict.style.background = '#004b31';
+    const detailMsg = dayGod === 'piancai' ? t('biancai_day_piancai') : t('biancai_month_piancai');
+    verdict.innerHTML = `
+      <p class="font-headline font-bold text-[#ffe088] text-base">${t('biancai_star_active')}</p>
+      <p class="text-[#bcedda] text-xs leading-relaxed mt-0.5">${detailMsg}</p>
+      <p class="text-[#ffe088] font-bold text-sm mt-2">${t('biancai_recommend_buy')}</p>
+    `;
+  } else {
+    card.style.background = '#f2f4ef';
+    iconBg.style.background = '#9eaa9e';
+    verdict.style.background = '#ecefea';
+    const detailMsg = dayGod === 'zhengcai' ? t('biancai_zhengcai_day') : t('biancai_no_wealth');
+    verdict.innerHTML = `
+      <p class="font-headline font-bold text-[#404943] text-base">${t('biancai_star_absent')}</p>
+      <p class="text-[#404943] text-xs leading-relaxed mt-0.5 opacity-70">${detailMsg}</p>
+      <p class="text-[#9eaa9e] text-sm mt-2">${t('biancai_no_buy')}</p>
+    `;
+  }
+
+  // Lucky hours section
+  const hoursSection = document.getElementById('biancaiHoursSection');
+  const hoursList    = document.getElementById('biancaiHoursList');
+  if (piancaiHours.length > 0) {
+    hoursSection.classList.remove('hidden');
+    hoursSection.classList.add('flex');
+    hoursList.innerHTML = piancaiHours.map(h =>
+      `<span class="text-xs font-bold px-3 py-1.5 rounded-full bg-[#004b31] text-[#bcedda]">${h.range}</span>`
+    ).join('');
+  } else {
+    hoursSection.classList.add('hidden');
+    hoursSection.classList.remove('flex');
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1570,9 +1425,16 @@ function renderLuckyAttributes(pillars, counts) {
 
 function updateSubtitle(pillars) {
   const p = pillars[2];
-  document.getElementById('manifestSubtitle').textContent = t('manifest_subtitleDynamic')
-    .replace('{yy}', t('yy_' + p.yinYang))
-    .replace('{el}', t('el_' + p.element));
+  const sgt = sgtNow();
+  const dateStr = sgt.getFullYear() + '-'
+    + String(sgt.getMonth()+1).padStart(2,'0') + '-'
+    + String(sgt.getDate()).padStart(2,'0');
+  const todayDP = dayPillar(sgt.getFullYear(), sgt.getMonth()+1, sgt.getDate());
+  document.getElementById('manifestSubtitle').textContent =
+    t('manifest_subtitleDynamic')
+      .replace('{yy}', t('yy_' + p.yinYang))
+      .replace('{el}', t('el_' + p.element))
+    + '  ·  ' + dateStr + ' ' + todayDP.stem + todayDP.branch;
 }
 
 function renderInitial() {
@@ -1616,14 +1478,7 @@ function calculate() {
 
   if (name) {
     currentUserName = name;
-    const initials = name.charAt(0).toUpperCase();
-    document.getElementById('drawerName').textContent    = name;
   }
-
-  const _calcPhase = t('phase_template')
-    .replace('{el}', t('el_'+yp.element)).replace('{animal}', t('animal_'+yp.animal))
-    .replace('{yy}', t('yy_'+dp.yinYang)).replace('{dayEl}', t('el_'+dp.element));
-  document.getElementById('drawerPhase').textContent  = _calcPhase;
 
   renderPillars(pillars);
   renderElements(counts);
@@ -1645,6 +1500,8 @@ function calculate() {
   renderElementDynamics(counts, dp.element);
   document.getElementById('elementInteraction').classList.remove('hidden');
 
+  renderBiancaiCard(checkTodayBiancai(dp.stemIdx));
+
   document.querySelector('section.lg\\:col-span-8').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
@@ -1657,441 +1514,6 @@ function realign() {
 // Boot
 setLang('en');
 
-// ═══════════════════════════════════════════════════════
-//  TAB SWITCHING
-// ═══════════════════════════════════════════════════════
-function showTab(tab) {
-  document.getElementById('totoSection').classList.toggle('hidden', tab !== 'toto');
-  document.getElementById('meihuaSection').classList.toggle('hidden', tab !== 'meihua');
-  document.getElementById('tab-toto').classList.toggle('active', tab === 'toto');
-  document.getElementById('tab-meihua').classList.toggle('active', tab === 'meihua');
-  document.getElementById('mtab-toto').classList.toggle('active', tab === 'toto');
-  document.getElementById('mtab-meihua').classList.toggle('active', tab === 'meihua');
-  if (tab === 'meihua') updateMeihuaClock();
-}
-
-let mobileMenuOpen = false;
-function toggleMobileMenu() {
-  mobileMenuOpen = !mobileMenuOpen;
-  document.getElementById('mobileDrawer').classList.toggle('open', mobileMenuOpen);
-  document.getElementById('drawerBackdrop').classList.toggle('open', mobileMenuOpen);
-  document.getElementById('closeOverlay').classList.toggle('hidden', !mobileMenuOpen);
-  document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
-}
-
-// Anime avatar on load (DiceBear avataaars) — shared seed for both nav & drawer
-(function() {
-  const seed = Math.random().toString(36).slice(2, 10);
-  const src  = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&skin=pale,light,tanned,yellow`;
-  document.getElementById('avatarImg').src = src;
-  document.getElementById('drawerAvatarImg').src = src;
-})();
-
-// ═══════════════════════════════════════════════════════
-//  梅花易数 ENGINE
-// ═══════════════════════════════════════════════════════
-
-// 先天八卦: 乾1 兑2 离3 震4 巽5 坎6 艮7 坤8
-// lines: [bottom, middle, top], 1=yang 0=yin
-const MH_TRIGRAMS = {
-  1:{name:'乾',nature:'天',symbol:'☰',element:'金',lines:[1,1,1],yinYang:'阳',family:'父',body:'头'},
-  2:{name:'兑',nature:'泽',symbol:'☱',element:'金',lines:[0,1,1],yinYang:'阴',family:'少女',body:'口'},
-  3:{name:'离',nature:'火',symbol:'☲',element:'火',lines:[1,0,1],yinYang:'阴',family:'中女',body:'目'},
-  4:{name:'震',nature:'雷',symbol:'☳',element:'木',lines:[0,0,1],yinYang:'阳',family:'长男',body:'足'},
-  5:{name:'巽',nature:'风',symbol:'☴',element:'木',lines:[1,1,0],yinYang:'阴',family:'长女',body:'股'},
-  6:{name:'坎',nature:'水',symbol:'☵',element:'水',lines:[0,1,0],yinYang:'阳',family:'中男',body:'耳'},
-  7:{name:'艮',nature:'山',symbol:'☶',element:'土',lines:[1,0,0],yinYang:'阳',family:'少男',body:'手'},
-  8:{name:'坤',nature:'地',symbol:'☷',element:'土',lines:[0,0,0],yinYang:'阴',family:'母',body:'腹'}
-};
-
-// 五行生克
-const MH_PRODUCES   = {金:'水',水:'木',木:'火',火:'土',土:'金'};
-const MH_OVERCOMES  = {金:'木',木:'土',土:'水',水:'火',火:'金'};
-
-// 64卦数据 key:'upper_lower'
-const MH_HEXAGRAMS = {
-  '1_1':{name:'乾为天',num:1,fortune:'大吉',keyword:'刚健自强',meaning:'龙行天下，阳刚纯粹，宜进取创业，诸事可成，大吉大利。'},
-  '1_2':{name:'天泽履',num:10,fortune:'吉',keyword:'谨慎行事',meaning:'履虎尾而不咬，凡事谨慎则吉，礼仪周全方可行，忌莽撞行事。'},
-  '1_3':{name:'天火同人',num:13,fortune:'吉',keyword:'同心合力',meaning:'志同道合，合作共赢，宽阔胸怀聚贤才，贵人相助，诸事可成。'},
-  '1_4':{name:'天雷无妄',num:25,fortune:'中',keyword:'顺应自然',meaning:'无妄之灾须谨防，顺天应命勿强求，静待良机方为上，妄动则凶。'},
-  '1_5':{name:'天风姤',num:44,fortune:'中',keyword:'邂逅相遇',meaning:'一阴初遇五阳，防小人阴险，女性缘分起，婚姻感情需审慎。'},
-  '1_6':{name:'天水讼',num:6,fortune:'凶',keyword:'争讼纠纷',meaning:'争讼不利，宜和解止讼，不宜冒进，慎防口舌是非，中途宜止。'},
-  '1_7':{name:'天山遁',num:33,fortune:'中',keyword:'适时退隐',meaning:'识时务者为俊杰，暂退以保存实力，韬光养晦待时机，退守则吉。'},
-  '1_8':{name:'天地否',num:12,fortune:'凶',keyword:'阴阳阻塞',meaning:'天地不交，万物不通，时运不济，宜守静待变，切勿强进。'},
-  '2_1':{name:'泽天夬',num:43,fortune:'吉',keyword:'果断决断',meaning:'决而去之，阳气盛行，宜果断行事，当机立断则成，优柔寡断则失。'},
-  '2_2':{name:'兑为泽',num:58,fortune:'吉',keyword:'喜悦和乐',meaning:'喜悦欢欣，口才出众，社交活跃，感情顺遂，财运良好。'},
-  '2_3':{name:'泽火革',num:49,fortune:'吉',keyword:'变革更新',meaning:'革故鼎新，去旧迎新，变化带来机遇，顺势而为则大利，保守则失机。'},
-  '2_4':{name:'泽雷随',num:17,fortune:'吉',keyword:'随机应变',meaning:'随时应变，顺应时势，跟随贵人则事半功倍，切勿固执己见。'},
-  '2_5':{name:'泽风大过',num:28,fortune:'小凶',keyword:'过犹不及',meaning:'栋梁弯曲，超负荷运转，需及时减负，切防物极必反，中庸为宜。'},
-  '2_6':{name:'泽水困',num:47,fortune:'凶',keyword:'困境磨砺',meaning:'陷于困境，但困中求通，君子处困修德，冷静应对，静待转机。'},
-  '2_7':{name:'泽山咸',num:31,fortune:'吉',keyword:'感应相通',meaning:'男女相感，心意相通，感情婚姻大吉，合作事业顺畅，以柔克刚。'},
-  '2_8':{name:'泽地萃',num:45,fortune:'吉',keyword:'聚集汇合',meaning:'万物聚集，人心归附，合群共进，财运亨通，宜凝聚力量谋大事。'},
-  '3_1':{name:'火天大有',num:14,fortune:'大吉',keyword:'大有所获',meaning:'居高临下，光明在上，大有所获，事业财运皆旺，名利双收。'},
-  '3_2':{name:'火泽睽',num:38,fortune:'凶',keyword:'乖违分离',meaning:'阴阳背离，意见相左，防合作破裂，小事可行大事难成，须化解矛盾。'},
-  '3_3':{name:'离为火',num:30,fortune:'中吉',keyword:'光明附丽',meaning:'双火相映，光明灿烂，才华出众，需有所依附方能发挥，文采事业旺。'},
-  '3_4':{name:'火雷噬嗑',num:21,fortune:'中',keyword:'咬合决断',meaning:'中有障碍，需果断清除，官司诉讼之象，强行突破则成，拖延则凶。'},
-  '3_5':{name:'火风鼎',num:50,fortune:'大吉',keyword:'鼎新革故',meaning:'鼎象立业，稳固根基，事业大成，文化艺术皆旺，改革创新大利。'},
-  '3_6':{name:'火水未济',num:64,fortune:'中',keyword:'未竟之业',meaning:'阴阳错位，诸事未成，需继续努力，有志者事竟成，终将成功。'},
-  '3_7':{name:'火山旅',num:56,fortune:'中',keyword:'旅途奔波',meaning:'客居他乡，漂泊不定，宜谦逊守礼，贸然行事有险，利于外出求职。'},
-  '3_8':{name:'火地晋',num:35,fortune:'大吉',keyword:'晋升进步',meaning:'旭日东升，仕途光明，晋升有望，名利双收，事业蒸蒸日上。'},
-  '4_1':{name:'雷天大壮',num:34,fortune:'大吉',keyword:'阳刚强盛',meaning:'雷动天上，阳气旺盛，行事强劲有力，进取则成，宜积极主动。'},
-  '4_2':{name:'雷泽归妹',num:54,fortune:'凶',keyword:'轻率出行',meaning:'少女出嫁，草率行事，婚姻需慎重，勿轻率决定，防感情冲动。'},
-  '4_3':{name:'雷火丰',num:55,fortune:'吉',keyword:'丰盛盛大',meaning:'雷火交加，气象宏大，事业鼎盛，但盛极必衰，居安思危方为智。'},
-  '4_4':{name:'震为雷',num:51,fortune:'中',keyword:'震动奋发',meaning:'双雷震动，警醒惕惧，经历惊吓后奋发图强，知惧而后安，终获吉。'},
-  '4_5':{name:'雷风恒',num:32,fortune:'吉',keyword:'恒久坚持',meaning:'雷风并行，持之以恒，婚姻稳固，事业长久，坚守正道必有成。'},
-  '4_6':{name:'雷水解',num:40,fortune:'吉',keyword:'解除险阻',meaning:'雷雨解困，险阻消除，烦恼化解，否极泰来，宜行动解决积压问题。'},
-  '4_7':{name:'雷山小过',num:62,fortune:'小凶',keyword:'小有过失',meaning:'可行小事，不宜大动，谨慎行事免小过，飞鸟不可高翔，守中为上。'},
-  '4_8':{name:'雷地豫',num:16,fortune:'吉',keyword:'欢乐豫悦',meaning:'和乐顺动，众心归附，音乐文艺旺，利于筹谋大事，预则立不预则废。'},
-  '5_1':{name:'风天小畜',num:9,fortune:'小吉',keyword:'蓄势待发',meaning:'蓄积力量，暂时受阻，宜积德积善，待时而动则吉，小有收获。'},
-  '5_2':{name:'风泽中孚',num:61,fortune:'吉',keyword:'诚信守中',meaning:'内外诚信，孚信于人，守诚则吉，宜以诚相待，官讼宜和解。'},
-  '5_3':{name:'风火家人',num:37,fortune:'吉',keyword:'家庭和睦',meaning:'家道兴旺，夫妻和谐，各守其位，家和万事兴，利于家庭内部事务。'},
-  '5_4':{name:'风雷益',num:42,fortune:'大吉',keyword:'增益获利',meaning:'上损下益，利于民众，投资经营大利，广结善缘，诸事增益。'},
-  '5_5':{name:'巽为风',num:57,fortune:'中',keyword:'谦逊顺从',meaning:'随风潜入，顺势而为，谦逊低调，利于商旅外交，宜进退适度。'},
-  '5_6':{name:'风水涣',num:59,fortune:'中',keyword:'涣散消融',meaning:'风行水上，聚散离合，宜团结一致，防离散瓦解，涣然冰释可期。'},
-  '5_7':{name:'风山渐',num:53,fortune:'吉',keyword:'渐进有序',meaning:'鸿雁循序渐进，不可操之过急，按部就班则成，功到自然成。'},
-  '5_8':{name:'风地观',num:20,fortune:'中',keyword:'观察审时',meaning:'观风察势，审时度势，宜观察不宜轻动，等待时机，以静制动。'},
-  '6_1':{name:'水天需',num:5,fortune:'中',keyword:'等待时机',meaning:'云行雨施，时机未到，需耐心等待，守正则吉，强行则凶。'},
-  '6_2':{name:'水泽节',num:60,fortune:'中',keyword:'节制适度',meaning:'节制有度，不可过分，量入为出，守中则吉，过节则苦。'},
-  '6_3':{name:'水火既济',num:63,fortune:'中吉',keyword:'既成完备',meaning:'阴阳交泰，诸事已成，需防患未然，居安思危，防止成就后的松懈。'},
-  '6_4':{name:'水雷屯',num:3,fortune:'中',keyword:'初创艰难',meaning:'万物初生，艰难创业，坚持不懈，终将出头，初难后易。'},
-  '6_5':{name:'水风井',num:48,fortune:'中吉',keyword:'滋养不竭',meaning:'井养无穷，诚实勤劳，学问德行深厚，利于长久发展，养人利己。'},
-  '6_6':{name:'坎为水',num:29,fortune:'凶',keyword:'重重险阻',meaning:'险坑重重，前途艰难，需诚信守正，逐步克服险阻，坚持正道终可脱险。'},
-  '6_7':{name:'水山蹇',num:39,fortune:'凶',keyword:'行路艰难',meaning:'前路艰险，举步维艰，需借助贵人，退守待援，利西南不利东北。'},
-  '6_8':{name:'水地比',num:8,fortune:'吉',keyword:'亲近协助',meaning:'众皆亲附，上下一心，合群互助则大吉，孤立则凶，宜广结善缘。'},
-  '7_1':{name:'山天大畜',num:26,fortune:'吉',keyword:'厚积薄发',meaning:'积聚力量，厚积薄发，学识渊博，时机成熟则大展身手，积德行善。'},
-  '7_2':{name:'山泽损',num:41,fortune:'中',keyword:'损减以益',meaning:'有损有益，减损自身以益他人，牺牲小利获长远利益，诚意奉献。'},
-  '7_3':{name:'山火贲',num:22,fortune:'中吉',keyword:'文采装饰',meaning:'文质彬彬，外表光鲜，宜从事文艺工作，外交有利，勿重形而忘实。'},
-  '7_4':{name:'山雷颐',num:27,fortune:'中',keyword:'颐养蓄育',meaning:'颐养身心，饮食起居需注意，言行举止影响运势，养正则吉。'},
-  '7_5':{name:'山风蛊',num:18,fortune:'中',keyword:'整治弊病',meaning:'腐败滋生，需整治革新，勇于担当改革，浴火重生，拨乱反正。'},
-  '7_6':{name:'山水蒙',num:4,fortune:'中',keyword:'启蒙求知',meaning:'蒙昧初开，求知学习，诚心求教则得良师，进步可期，宜虚心学习。'},
-  '7_7':{name:'艮为山',num:52,fortune:'中',keyword:'静止止步',meaning:'适时停止，知止而止，保守稳健，宜守不宜进，静观其变。'},
-  '7_8':{name:'山地剥',num:23,fortune:'凶',keyword:'剥落衰退',meaning:'小人当道，事业剥落，宜守正不妄为，等待时机，防止损失蔓延。'},
-  '8_1':{name:'地天泰',num:11,fortune:'大吉',keyword:'通泰顺畅',meaning:'天地交泰，万象更新，诸事顺利，财运亨通，大吉大利，万物生长。'},
-  '8_2':{name:'地泽临',num:19,fortune:'吉',keyword:'临近亲近',meaning:'居高临下，亲近百姓，事业向好，仕途光明，宜主动接触事务。'},
-  '8_3':{name:'地火明夷',num:36,fortune:'凶',keyword:'才华受损',meaning:'光明入地，才华被压，宜隐忍蛰伏，藏锋待时，不可张扬。'},
-  '8_4':{name:'地雷复',num:24,fortune:'吉',keyword:'复归返本',meaning:'一阳来复，冬去春来，否极泰来，重新出发大吉，万象更新。'},
-  '8_5':{name:'地风升',num:46,fortune:'吉',keyword:'上升进步',meaning:'积土成山，循序上升，事业稳步提升，前途光明，积累终成就。'},
-  '8_6':{name:'地水师',num:7,fortune:'中',keyword:'统帅行师',meaning:'领兵出征，纪律严明，需有统帅之才，凡事需谋后动，团结则胜。'},
-  '8_7':{name:'地山谦',num:15,fortune:'吉',keyword:'谦逊有德',meaning:'谦虚处世，厚德积善，谦谦君子，终获众人尊重，运势持续向好。'},
-  '8_8':{name:'坤为地',num:2,fortune:'吉',keyword:'厚德载物',meaning:'大地包容，厚德承载，宜柔顺处世，顺势而为则大吉，利于长远。'}
-};
-
-// 各领域指引 — retrieved from t() at render time
-
-// 线转卦号
-function mhLinesToTrigram(l) {
-  const map = {'111':1,'011':2,'101':3,'001':4,'110':5,'010':6,'100':7,'000':8};
-  return map[l.join('')];
-}
-
-// 获取数字起卦
-function mhNumToTrigram(n) {
-  const r = n % 8; return r === 0 ? 8 : r;
-}
-function mhNumToLine(n) {
-  const r = n % 6; return r === 0 ? 6 : r;
-}
-
-// 互卦（取二三四爻为下，三四五爻为上）
-function mhNuclear(lines) {
-  const nuLower = [lines[1], lines[2], lines[3]];
-  const nuUpper = [lines[2], lines[3], lines[4]];
-  return { upper: mhLinesToTrigram(nuUpper), lower: mhLinesToTrigram(nuLower) };
-}
-
-// 变卦（翻转动爻）
-function mhChanged(lines, changingLine) {
-  const cl = [...lines];
-  const idx = changingLine - 1;
-  cl[idx] = cl[idx] === 1 ? 0 : 1;
-  const lower = cl.slice(0, 3);
-  const upper = cl.slice(3, 6);
-  return { upper: mhLinesToTrigram(upper), lower: mhLinesToTrigram(lower) };
-}
-
-// 体卦判定: 阳卦(奇数阳爻)为乾1震4坎6艮7，取上卦为体
-// 规则：上卦为体，下卦为用（此为简化通行规则）
-function mhTiYong(upperNum) {
-  const yangTri = [1, 4, 6, 7]; // 阳卦
-  const isTiYang = yangTri.includes(upperNum);
-  return isTiYang;
-}
-
-// 五行生克断语
-function mhRelation(tiEl, yongEl) {
-  if (tiEl === yongEl) return {label:t('mh_relHarmony'),      icon:'⚖️', fortune:t('mh_relHarmonyFortune'),      fortuneKey:'中吉', isGood:true,  desc:t('mh_relHarmonyDesc')};
-  if (MH_PRODUCES[tiEl]  === yongEl) return {label:t('mh_relTiProdYong'), icon:'🌿', fortune:t('mh_relTiProdYongFortune'), fortuneKey:'吉',  isGood:true,  desc:t('mh_relTiProdYongDesc')};
-  if (MH_PRODUCES[yongEl]=== tiEl)   return {label:t('mh_relYongProdTi'), icon:'✨', fortune:t('mh_relYongProdTiFortune'), fortuneKey:'大吉', isGood:true,  desc:t('mh_relYongProdTiDesc')};
-  if (MH_OVERCOMES[tiEl] === yongEl) return {label:t('mh_relTiOverYong'), icon:'⚔️', fortune:t('mh_relTiOverYongFortune'), fortuneKey:'吉',  isGood:true,  desc:t('mh_relTiOverYongDesc')};
-  if (MH_OVERCOMES[yongEl]=== tiEl)  return {label:t('mh_relYongOverTi'), icon:'⚠️', fortune:t('mh_relYongOverTiFortune'), fortuneKey:'凶',  isGood:false, desc:t('mh_relYongOverTiDesc')};
-  return {label:'—', icon:'◯', fortune:'—', fortuneKey:'中', isGood:null, desc:'—'};
-}
-
-// 爻位五行（简化：以卦的五行为基础，六爻对应六亲）
-// Yao labels/roles fetched via t() at render time
-
-// 当前选中的起卦方法
-let mhCurrentMethod = 'time';
-
-function setMeihuaMethod(method) {
-  mhCurrentMethod = method;
-  ['time','number','object'].forEach(m => {
-    const btn = document.getElementById('mh-method-' + m);
-    const inp = document.getElementById('mh-input-' + m);
-    if (m === method) {
-      btn.style.background = '#004b31'; btn.style.color = 'white'; btn.style.borderColor = '#004b31';
-      inp.classList.remove('hidden'); inp.classList.add('flex');
-    } else {
-      btn.style.background = '#ecefea'; btn.style.color = '#404943'; btn.style.borderColor = '#ecefea';
-      inp.classList.add('hidden'); inp.classList.remove('flex');
-    }
-  });
-}
-
-function updateMeihuaClock() {
-  const now = new Date();
-  const y = now.getFullYear() % 100;
-  const mo = now.getMonth() + 1;
-  const d  = now.getDate();
-  const h  = now.getHours() === 0 ? 12 : Math.ceil(now.getHours() / 2); // 时辰
-  const sum = y + mo + d + h;
-  document.getElementById('mh-time-display').textContent =
-    `${now.getFullYear()}年${mo}月${d}日 ${now.getHours().toString().padStart(2,'0')}时`;
-  document.getElementById('mh-time-numbers').textContent =
-    `${y} + ${mo} + ${d} + ${h} = ${sum}`;
-}
-
-function castMeihua() {
-  const errDiv = document.getElementById('mh-error');
-  errDiv.classList.add('hidden');
-
-  let upperNum, lowerNum, changingLineNum, question;
-
-  if (mhCurrentMethod === 'time') {
-    const now = new Date();
-    const y = now.getFullYear() % 100;
-    const mo = now.getMonth() + 1;
-    const d  = now.getDate();
-    const h  = now.getHours() === 0 ? 12 : Math.ceil(now.getHours() / 2);
-    upperNum = mhNumToTrigram(y + mo + d);
-    lowerNum = mhNumToTrigram(y + mo + d + h);
-    changingLineNum = mhNumToLine(y + mo + d + h);
-    question = document.getElementById('mh-question-time').value.trim() || t('mh_defaultQuestion');
-  } else if (mhCurrentMethod === 'number') {
-    const u = parseInt(document.getElementById('mh-upper-num').value);
-    const l = parseInt(document.getElementById('mh-lower-num').value);
-    const li = parseInt(document.getElementById('mh-line-num').value);
-    if (!u || !l || !li || li < 1 || li > 6) {
-      errDiv.textContent = t('mh_errorInputs'); errDiv.classList.remove('hidden'); return;
-    }
-    upperNum = mhNumToTrigram(u);
-    lowerNum = mhNumToTrigram(l);
-    changingLineNum = li;
-    question = document.getElementById('mh-question-number').value.trim() || t('mh_defaultQuestion');
-  } else {
-    const u = parseInt(document.getElementById('mh-obj-upper').value);
-    const l = parseInt(document.getElementById('mh-obj-lower').value);
-    if (!u || !l) {
-      errDiv.textContent = t('mh_errorObjects'); errDiv.classList.remove('hidden'); return;
-    }
-    upperNum = mhNumToTrigram(u);
-    lowerNum = mhNumToTrigram(l);
-    changingLineNum = mhNumToLine(u + l);
-    question = document.getElementById('mh-question-object').value.trim() || t('mh_defaultQuestion');
-  }
-
-  const benKey  = `${upperNum}_${lowerNum}`;
-  const benHex  = MH_HEXAGRAMS[benKey];
-  const upperTri= MH_TRIGRAMS[upperNum];
-  const lowerTri= MH_TRIGRAMS[lowerNum];
-
-  // All 6 lines [bottom→top]: lower[0..2] then upper[0..2]
-  const allLines = [...lowerTri.lines, ...upperTri.lines];
-
-  // 互卦
-  const nuIdx   = mhNuclear(allLines);
-  const nuKey   = `${nuIdx.upper}_${nuIdx.lower}`;
-  const nuHex   = MH_HEXAGRAMS[nuKey];
-  const nuUpper = MH_TRIGRAMS[nuIdx.upper];
-  const nuLower = MH_TRIGRAMS[nuIdx.lower];
-  const nuLines = [...nuLower.lines, ...nuUpper.lines];
-
-  // 变卦
-  const bianIdx  = mhChanged(allLines, changingLineNum);
-  const bianKey  = `${bianIdx.upper}_${bianIdx.lower}`;
-  const bianHex  = MH_HEXAGRAMS[bianKey];
-  const bianUpper= MH_TRIGRAMS[bianIdx.upper];
-  const bianLower= MH_TRIGRAMS[bianIdx.lower];
-  const bianLines= [...bianLower.lines, ...bianUpper.lines];
-
-  // 体用 (上卦为体卦，下卦为用卦)
-  const tiEl    = upperTri.element;
-  const yongEl  = lowerTri.element;
-  const relation= mhRelation(tiEl, yongEl);
-
-  currentMeihuaData = {
-    question, benHex, upperTri, lowerTri, allLines, changingLineNum,
-    nuHex, nuLines, nuUpper, nuLower,
-    bianHex, bianLines, bianUpper, bianLower,
-    tiEl, yongEl, relation,
-    benKey, nuKey, bianKey,
-    upperNum, lowerNum,
-    bianUpperNum: bianIdx.upper, bianLowerNum: bianIdx.lower
-  };
-  renderMeihuaResult(currentMeihuaData);
-}
-
-function renderMeihuaHexagram(containerId, lines, changingLine) {
-  const el = document.getElementById(containerId);
-  el.innerHTML = '';
-  // Display lines 6 to 1 (top to bottom), index 5 down to 0
-  for (let i = 5; i >= 0; i--) {
-    const isChanging = (i + 1) === changingLine;
-    const isYang = lines[i] === 1;
-    const sep = (i === 2) ? '<div style="height:6px"></div>' : '';
-    let html;
-    if (isYang) {
-      html = `<div class="hx-yang${isChanging ? ' hx-changing' : ''}" style="animation-delay:${(5-i)*0.06}s" class="hx-anim"></div>`;
-    } else {
-      html = `<div class="hx-yin${isChanging ? ' hx-changing' : ''}"><span></span><span></span></div>`;
-    }
-    el.innerHTML += sep + html;
-  }
-  // Add animated class properly
-  el.querySelectorAll('.hx-yang, .hx-yin').forEach((line, idx) => {
-    line.style.animation = `hexReveal 0.35s ease ${idx * 0.06}s forwards`;
-    line.style.opacity = '0';
-  });
-}
-
-function renderMeihuaResult(data) {
-  const { question, benHex, upperTri, lowerTri, allLines, changingLineNum,
-          nuHex, nuLines, nuUpper, nuLower,
-          bianHex, bianLines, bianUpper, bianLower,
-          tiEl, yongEl, relation,
-          benKey, nuKey, bianKey,
-          upperNum, lowerNum, bianUpperNum, bianLowerNum } = data;
-
-  const tBen  = (t('mh_hex')[benKey])  || benHex;
-  const tNu   = (t('mh_hex')[nuKey])   || nuHex;
-  const tBian = (t('mh_hex')[bianKey]) || bianHex;
-  const triN  = t('mh_triNature');
-  const triEl = t('mh_triElement');
-
-  const now = new Date();
-  document.getElementById('mh-question-display').textContent = question;
-  document.getElementById('mh-cast-time').textContent =
-    `${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-
-  renderMeihuaHexagram('mh-hex-benkua',  allLines,  changingLineNum);
-  renderMeihuaHexagram('mh-hex-hukua',   nuLines,   null);
-  renderMeihuaHexagram('mh-hex-biankua', bianLines, null);
-
-  // 本卦
-  document.getElementById('mh-benkua-name').textContent = tBen.name;
-  document.getElementById('mh-benkua-keyword').textContent = tBen.keyword;
-  document.getElementById('mh-benkua-full-name').textContent =
-    t('mh_hexFullNameTpl')
-      .replace('{num}', benHex.num).replace('{name}', tBen.name)
-      .replace('{upper}', triN[upperNum]).replace('{lower}', triN[lowerNum]);
-  document.getElementById('mh-benkua-meaning').textContent = tBen.meaning;
-  document.getElementById('mh-changing-line').textContent =
-    t('mh_changingLineTpl').replace('{n}', changingLineNum);
-
-  // 互卦
-  document.getElementById('mh-hukua-name').textContent = tNu.name;
-  document.getElementById('mh-hukua-keyword').textContent = tNu.keyword;
-
-  // 变卦
-  document.getElementById('mh-biankua-name').textContent = tBian.name;
-  document.getElementById('mh-biankua-keyword').textContent = tBian.keyword;
-  document.getElementById('mh-biankua-full-name').textContent =
-    t('mh_hexFullNameTpl')
-      .replace('{num}', bianHex.num).replace('{name}', tBian.name)
-      .replace('{upper}', triN[bianUpperNum]).replace('{lower}', triN[bianLowerNum]);
-  document.getElementById('mh-biankua-meaning').textContent = tBian.meaning;
-
-  // 体用
-  document.getElementById('mh-ti-icon').textContent = upperTri.name;
-  document.getElementById('mh-ti-name').textContent = `${upperTri.name} · ${triN[upperNum]}`;
-  document.getElementById('mh-ti-element').textContent = triEl[upperNum];
-  document.getElementById('mh-yong-icon').textContent = lowerTri.name;
-  document.getElementById('mh-yong-name').textContent = `${lowerTri.name} · ${triN[lowerNum]}`;
-  document.getElementById('mh-yong-element').textContent = triEl[lowerNum];
-
-  // 生克关系
-  document.getElementById('mh-relation-icon').textContent  = relation.icon;
-  document.getElementById('mh-relation-label').textContent = `${relation.label} — ${relation.fortune}`;
-  document.getElementById('mh-relation-desc').textContent  = relation.desc;
-
-  // 吉凶 badge — use fortuneKey for color, translated string for display
-  const badge = document.getElementById('mh-fortune-badge');
-  const fortuneColors = {'大吉':'#004b31,#ffe088','吉':'#004b31,#bcedda','小吉':'#735c00,#fff3c4','中吉':'#004b31,#bcedda','中':'#404943,#ecefea','小凶':'#93000a,#ffdad6','凶':'#ba1a1a,white','大凶':'#690005,white'};
-  const [bg, col] = (fortuneColors[relation.fortuneKey] || '#404943,#ecefea').split(',');
-  badge.style.background = bg; badge.style.color = col;
-  badge.textContent = relation.fortune;
-
-  // 综合断语
-  const benF  = t('mh_triFortune')[benHex.fortune]  || benHex.fortune;
-  const bianF = t('mh_triFortune')[bianHex.fortune] || bianHex.fortune;
-  const verdict = relation.isGood ? t('mh_verdictGood') : t('mh_verdictBad');
-  document.getElementById('mh-summary').textContent =
-    t('mh_summaryTemplate')
-      .replace('{ben}',   tBen.name)  .replace('{benKw}',  tBen.keyword)  .replace('{benF}',  benF)
-      .replace('{rel}',   relation.label).replace('{relF}', relation.fortune)
-      .replace('{bian}',  tBian.name) .replace('{bianKw}', tBian.keyword) .replace('{bianF}', bianF)
-      .replace('{nu}',    tNu.name)   .replace('{nuKw}',   tNu.keyword)
-      .replace('{verdict}', verdict);
-
-  // 爻位分析
-  const yaoGrid   = document.getElementById('mh-yao-grid');
-  const yaoLabels = t('mh_yaoLabels');
-  const yaoRoles  = t('mh_yaoRoles');
-  yaoGrid.innerHTML = '';
-  for (let i = 5; i >= 0; i--) {
-    const isChanging = (i + 1) === changingLineNum;
-    const triNum = i >= 3 ? upperNum : lowerNum;
-    yaoGrid.innerHTML += `
-      <div class="flex flex-col items-center gap-1.5 p-3 rounded-xl ${isChanging ? 'bg-[#fff3c4] border border-[#ffe088]' : 'bg-[#f2f4ef]'}">
-        <div class="text-[9px] font-bold uppercase tracking-wider ${isChanging ? 'text-[#735c00]' : 'text-[#404944]'}">${yaoLabels[i]}</div>
-        <div class="w-8 h-2 rounded" style="background:${allLines[i]===1?'#004b31':'transparent'};border:${allLines[i]===0?'2px solid #004b31':'none'}"></div>
-        <div class="text-[9px] text-[#404943] text-center leading-tight">${triEl[triNum]} · ${yaoRoles[i]}</div>
-        ${isChanging ? '<div class="text-[9px] text-[#735c00] font-bold">动</div>' : ''}
-      </div>`;
-  }
-
-  // 各领域指引
-  const domains   = document.getElementById('mh-domains');
-  const dData     = t('mh_dom')[tiEl] || t('mh_dom')['土'];
-  const domLabels = t('mh_domLabels');
-  const domainList = [
-    {icon:'💰', label:domLabels.wealth, text:dData.wealth},
-    {icon:'🏢', label:domLabels.career, text:dData.career},
-    {icon:'💕', label:domLabels.love,   text:dData.love},
-    {icon:'🌿', label:domLabels.health, text:dData.health},
-    {icon:'🌙', label:domLabels.year,   text:`${tBen.keyword} · ${benF}`},
-    {icon:'🧭', label:domLabels.advice, text:relation.isGood ? t('mh_verdictGood') : t('mh_verdictBad')}
-  ];
-  domains.innerHTML = domainList.map(d => `
-    <div class="bg-[rgba(188,237,218,0.1)] rounded-2xl p-4 flex flex-col gap-2">
-      <div class="flex items-center gap-2">
-        <span class="text-lg">${d.icon}</span>
-        <span class="text-[10px] font-bold uppercase tracking-widest text-[#bcedda]">${d.label}</span>
-      </div>
-      <p class="text-[#bcedda] text-xs leading-relaxed">${d.text}</p>
-    </div>
-  `).join('');
-
-  // Show results
-  document.getElementById('mh-placeholder').classList.add('hidden');
-  document.getElementById('mh-result').classList.remove('hidden');
-  document.getElementById('mh-result').classList.add('flex');
-  document.getElementById('mh-result').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-// Clock update
-setInterval(updateMeihuaClock, 1000);
-updateMeihuaClock();
 </script>
 </body>
 </html>
