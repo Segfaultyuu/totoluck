@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>TOTO Luck | Jade &amp; Prosperity</title>
+  <title>LuckyPillar — TOTO Fortune</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.min.js"></script>
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
   <script>
     tailwind.config = {
@@ -62,7 +63,7 @@
 <!-- Top Navigation -->
 <nav class="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 sm:px-6 md:px-10
             bg-[rgba(248,250,245,0.92)] backdrop-blur-xl shadow-[0_4px_24px_rgba(25,28,26,0.07)]">
-  <div class="font-headline text-base sm:text-xl font-bold italic text-[#004b36] leading-tight">Jade &amp; Prosperity</div>
+  <div class="font-headline text-base sm:text-xl font-bold italic text-[#004b36] leading-tight">LuckyPillar</div>
   <div class="flex items-center gap-0.5 bg-[#ecefea] rounded-full p-0.5 sm:p-1 whitespace-nowrap">
     <button onclick="setLang('en')" id="lang-en" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">EN</button>
     <button onclick="setLang('zh')" id="lang-zh" class="lang-btn text-[11px] font-bold px-2 sm:px-3 py-1.5 rounded-full">中文</button>
@@ -130,37 +131,6 @@
           </form>
         </div>
 
-        <!-- 偏财 Wealth Star Card -->
-        <div class="rounded-3xl p-6 hidden flex-col gap-4" id="biancaiCard">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" id="biancaiIconBg" style="background:#735c00">
-              <svg class="w-4 h-4 text-white" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 12h1"/><path d="M15 12h1"/></svg>
-            </div>
-            <div>
-              <h4 class="font-headline text-base font-bold leading-tight" id="biancaiTitle"></h4>
-              <p class="text-[9px] uppercase tracking-wider opacity-50" id="biancaiSubtitle"></p>
-            </div>
-          </div>
-          <!-- Today pillar row -->
-          <div class="bg-white rounded-xl p-3 flex items-center justify-between gap-2" id="biancaiPillarRow">
-            <div>
-              <p class="text-[9px] font-bold uppercase tracking-wider text-[#404943] mb-0.5" id="biancaiPillarLabel"></p>
-              <p class="font-headline font-bold text-[#00321f] text-xl" id="biancaiPillarValue"></p>
-            </div>
-            <div class="text-right">
-              <p class="text-[9px] font-bold uppercase tracking-wider text-[#404943] mb-0.5" id="biancaiStarLabel"></p>
-              <p class="font-bold text-sm" id="biancaiStarValue"></p>
-            </div>
-          </div>
-          <!-- Verdict -->
-          <div class="rounded-2xl p-4 flex flex-col gap-1.5" id="biancaiVerdict"></div>
-          <!-- Lucky hours -->
-          <div id="biancaiHoursSection" class="hidden flex-col gap-2">
-            <p class="text-[10px] font-bold uppercase tracking-wider text-[#404943]" id="biancaiHoursLabel"></p>
-            <div id="biancaiHoursList" class="flex flex-wrap gap-2"></div>
-          </div>
-        </div>
-
         <!-- Luck Attribute Cards -->
         <div class="flex flex-col gap-4">
           <div class="rounded-xl p-6 flex items-center justify-between transition-all duration-700" id="colorCard" style="background:#bcedda">
@@ -201,10 +171,61 @@
           </div>
         </div>
 
+        <!-- Ba Zi Four Pillars -->
+        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-8">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-headline text-2xl font-bold text-[#00321f]" data-i18n="bazi_title">Ba Zi: The Four Pillars</h3>
+            <span class="text-sm text-[#004b31] italic" id="dayMasterLabel">Day Master: — </span>
+          </div>
+          <div class="grid grid-cols-4 gap-3 text-center" id="pillarsGrid">
+          </div>
+        </div>
+
       </section>
 
       <!-- Right Column -->
       <section class="lg:col-span-8 flex flex-col gap-8">
+
+        <!-- 偏财 Wealth Star Card -->
+        <div class="rounded-3xl p-6 flex flex-col gap-4" id="biancaiCard">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" id="biancaiIconBg" style="background:#735c00">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 12h1"/><path d="M15 12h1"/></svg>
+            </div>
+            <div>
+              <h4 class="font-headline text-base font-bold leading-tight" id="biancaiTitle"></h4>
+              <p class="text-[9px] uppercase tracking-wider opacity-50" id="biancaiSubtitle"></p>
+            </div>
+          </div>
+          <!-- Today pillar row -->
+          <div class="bg-white rounded-xl p-3 flex items-center justify-between gap-2" id="biancaiPillarRow">
+            <div>
+              <p class="text-[9px] font-bold uppercase tracking-wider text-[#404943] mb-0.5" id="biancaiPillarLabel"></p>
+              <p class="font-headline font-bold text-[#00321f] text-xl" id="biancaiPillarValue"></p>
+            </div>
+            <div class="text-right">
+              <p class="text-[9px] font-bold uppercase tracking-wider text-[#404943] mb-0.5" id="biancaiStarLabel"></p>
+              <p class="font-bold text-sm" id="biancaiStarValue"></p>
+            </div>
+          </div>
+          <!-- Verdict -->
+          <div class="rounded-2xl p-4 flex flex-col gap-1.5" id="biancaiVerdict"></div>
+          <!-- Why analysis -->
+          <div id="biancaiAnalysis" class="hidden flex-col gap-2">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-[#404943]" id="biancaiAnalysisLabel"></p>
+            <div id="biancaiAnalysisBody" class="flex flex-col gap-2"></div>
+          </div>
+          <!-- Lucky hours -->
+          <div id="biancaiHoursSection" class="hidden flex-col gap-2">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-[#404943]" id="biancaiHoursLabel"></p>
+            <div id="biancaiHoursList" class="flex flex-wrap gap-2"></div>
+          </div>
+          <!-- Next lucky days -->
+          <div id="biancaiNextSection" class="hidden flex-col gap-2">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-[#404943]" id="biancaiNextLabel"></p>
+            <div id="biancaiNextList" class="flex flex-col gap-2"></div>
+          </div>
+        </div>
 
         <!-- Sacred Manifestation -->
         <div class="rounded-3xl p-1 jade-grad shadow-2xl">
@@ -220,16 +241,15 @@
               <div class="flex flex-wrap justify-center gap-5" id="mainNumbers"></div>
               <div class="flex items-end gap-5" id="bonusRow"></div>
             </div>
-          </div>
-        </div>
-
-        <!-- Ba Zi Four Pillars -->
-        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-8">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <h3 class="font-headline text-2xl font-bold text-[#00321f]" data-i18n="bazi_title">Ba Zi: The Four Pillars</h3>
-            <span class="text-sm text-[#004b31] italic" id="dayMasterLabel">Day Master: — </span>
-          </div>
-          <div class="grid grid-cols-4 gap-3 text-center" id="pillarsGrid">
+            <div class="flex justify-center relative z-10">
+              <button onclick="realign()"
+                      class="flex items-center gap-3 px-8 py-4 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)]
+                             hover:bg-[rgba(255,255,255,0.10)] rounded-full transition-all
+                             text-[#bcedda] text-sm font-semibold uppercase tracking-[1.4px]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+                <span data-i18n="manifest_realign">Re-align Elements</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -239,11 +259,6 @@
           <div class="flex flex-col gap-5" id="elementBars"></div>
         </div>
 
-        <!-- Five Elements Interaction -->
-        <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 hidden" id="elementInteraction">
-          <h4 class="font-headline text-xl font-bold text-[#00321f] mb-6" data-i18n="dynamics_title">Element Dynamics</h4>
-          <div class="grid grid-cols-5 gap-3 text-center" id="elementDynamicsGrid"></div>
-        </div>
 
       </section>
     </div>
@@ -254,7 +269,7 @@
 
 <!-- Footer -->
 <footer class="bg-[#00321f] w-full pt-16 pb-8 px-12 mt-20 flex flex-col items-center gap-8">
-  <div class="font-headline text-3xl font-bold text-white">Jade &amp; Prosperity</div>
+  <div class="font-headline text-3xl font-bold text-white">LuckyPillar</div>
   <div class="flex flex-wrap justify-center gap-8 text-sm">
     <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_scholarPath">The Scholar's Path</a>
     <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_privacy">Privacy Policy</a>
@@ -276,9 +291,9 @@ const TRANSLATIONS = {
     sidebar_dashboard:'Dashboard', sidebar_bazi:'Personal Ba Zi', sidebar_fengShui:'Feng Shui',
     sidebar_bookConsult:'Book Consultation', sidebar_settings:'⚙ Settings', sidebar_support:'? Support',
     sidebar_masterName:'Master Lin', sidebar_phase:'Wood Dragon Phase',
-    hero_badge:'Celestial Alignment',
-    hero_title:'Seek Your <span class="italic text-[#ffe088]">Jade<br/>Fortune</span>',
-    hero_subtitle:'Harmonizing your personal elements with the flow of the universe to reveal prosperous sequences.',
+    hero_badge:'Singapore TOTO · Just For Fun',
+    hero_title:'Try Your <span class="italic text-[#ffe088]">TOTO<br/>Luck</span>',
+    hero_subtitle:'Enter your birth date and let your Ba Zi guide your numbers. A fun, light-hearted take on Singapore TOTO — not financial advice, just a little cosmic nudge.',
     form_title:"Scholar's Input", form_nameLabel:'Full Name', form_namePlaceholder:'Enter name',
     form_dateLabel:'Birth Date', form_timeLabel:'Birth Time', form_optional:'(optional)',
     form_calcBtn:'Calculate Manifestation', form_errorDate:'Please enter your birth date to begin the calculation.',
@@ -336,17 +351,22 @@ const TRANSLATIONS = {
     biancai_month_piancai:"This month carries 偏財 energy — moderate windfall luck this period.",
     biancai_zhengcai_day:"Today brings 正財 (Direct Wealth) — steady gains favored, not windfall.",
     biancai_no_wealth:'No wealth star is active in today\'s chart.',
-    biancai_why_title:'Why No Wealth Today',
-    biancai_dm_label:'Your Day Master',
-    biancai_wealth_el_label:'Wealth Element Needed',
-    biancai_today_stem_label:"Today's Day Stem",
-    biancai_relation_label:'Relation to You',
-    biancai_look_for:'Wealth star activates on a',
-    biancai_or:'or',
-    biancai_day_suffix:'day',
+    biancai_analysis_label:'Why No Wealth Star Today?',
+    biancai_analysis_label_active:'Today\'s Wealth Reading',
+    biancai_next_label:'Next Lucky TOTO Days',
+    biancai_next_days_label:'{n} days away',
+    biancai_dm_intro:'Your Day Master is {yy} {el} ({stem}).',
+    biancai_piancai_el:'Your 偏財 (Side Wealth) element is {el} — same polarity as you.',
+    biancai_zhengcai_el:'Your 正財 (Direct Wealth) element is {el} — opposite polarity.',
+    biancai_today_day_is:'Today\'s day stem is {stem} ({el}) — ',
+    biancai_clash_reason:'this clashes with your Day Master, suppressing wealth energy.',
+    biancai_neutral_reason:'this carries no direct wealth relationship to your chart.',
+    biancai_zhengcai_reason:'this is your 正財 star — steady wealth, not windfall.',
+    biancai_hour_tip:'Even without a wealth day, 偏財 hours still occur today.',
+    biancai_empty_prompt:'Enter your birth date above to reveal your wealth star forecast.',
     footer_scholarPath:"The Scholar's Path", footer_privacy:'Privacy Policy',
     footer_lunar:'Lunar Calendar', footer_terms:'Terms of Service',
-    footer_copyright:'© 2024 Jade & Prosperity Metaphysics. All Rights Reserved.',
+    footer_copyright:'© 2024 LuckyPillar. All Rights Reserved.',
     // ── Meihua UI ──
     mh_banner_badge:'Song Dynasty Oracle', mh_banner_desc:'Created by Shao Kangjie, this oracle derives hexagrams from the primordial numbers, revealing fortune through the cycle of elemental generation and overcoming.',
     mh_heaven_earth:'Heaven & Earth',
@@ -481,9 +501,9 @@ const TRANSLATIONS = {
     sidebar_dashboard:'总览', sidebar_bazi:'个人八字', sidebar_fengShui:'风水',
     sidebar_bookConsult:'预约咨询', sidebar_settings:'⚙ 设置', sidebar_support:'? 支持',
     sidebar_masterName:'林大师', sidebar_phase:'木龙运程',
-    hero_badge:'天象对齐',
-    hero_title:'寻您<span class="italic text-[#ffe088]">翠玉<br/>福气</span>',
-    hero_subtitle:'将个人五行与宇宙能量融合，揭示吉祥数字序列。',
+    hero_badge:'新加坡TOTO · 娱乐为主',
+    hero_title:'试试您的<span class="italic text-[#ffe088]">TOTO<br/>运气</span>',
+    hero_subtitle:'输入生日，让八字为您指引号码。轻松好玩的新加坡TOTO参考工具 —— 仅供娱乐，不构成任何投注建议。',
     form_title:'学者录入', form_nameLabel:'全名', form_namePlaceholder:'请输入姓名',
     form_dateLabel:'出生日期', form_timeLabel:'出生时间', form_optional:'(可选)',
     form_calcBtn:'推算显化', form_errorDate:'请输入出生日期以开始推算。',
@@ -541,17 +561,22 @@ const TRANSLATIONS = {
     biancai_month_piancai:'本月月柱带偏财气息，月内偏财运有所加持。',
     biancai_zhengcai_day:'今日日柱为正财星，宜稳健理财，不宜博彩。',
     biancai_no_wealth:'今日财星未现，宜守财待机，暂缓购彩。',
-    biancai_why_title:'今日无财星原因',
-    biancai_dm_label:'您的日元',
-    biancai_wealth_el_label:'财星五行',
-    biancai_today_stem_label:'今日日干',
-    biancai_relation_label:'与您的关系',
-    biancai_look_for:'财星启动于',
-    biancai_or:'或',
-    biancai_day_suffix:'日',
+    biancai_analysis_label:'今日为何无财星？',
+    biancai_analysis_label_active:'今日财星解析',
+    biancai_next_label:'近期偏财吉日预测',
+    biancai_next_days_label:'还有{n}天',
+    biancai_dm_intro:'您的日元为{yy}{el}（{stem}）。',
+    biancai_piancai_el:'您的偏财五行为{el}，与您日元同阴阳。',
+    biancai_zhengcai_el:'您的正财五行为{el}，与您日元异阴阳。',
+    biancai_today_day_is:'今日日干为{stem}（{el}）——',
+    biancai_clash_reason:'与您日元相冲，财气受阻。',
+    biancai_neutral_reason:'与您八字无直接财星关系。',
+    biancai_zhengcai_reason:'为您的正财星，宜稳健理财，不宜博彩。',
+    biancai_hour_tip:'即使今日非偏财日，仍有偏财时辰可把握。',
+    biancai_empty_prompt:'请输入您的生日，查看专属财星预测。',
     footer_scholarPath:'学者之路', footer_privacy:'隐私政策',
     footer_lunar:'农历日历', footer_terms:'服务条款',
-    footer_copyright:'© 2024 翠玉兴旺玄学。版权所有。',
+    footer_copyright:'© 2024 LuckyPillar。版权所有。',
     // ── 梅花易数 UI (zh) ──
     mh_banner_badge:'宋朝易数', mh_banner_desc:'邵康节先生所创，以先天易数起卦，通过体用生克关系，洞察事物发展脉络，预测吉凶祸福。',
     mh_heaven_earth:'天 · 地',
@@ -680,9 +705,9 @@ const TRANSLATIONS = {
     sidebar_dashboard:'Papan Pemuka', sidebar_bazi:'Ba Zi Peribadi', sidebar_fengShui:'Feng Shui',
     sidebar_bookConsult:'Tempah Perundingan', sidebar_settings:'⚙ Tetapan', sidebar_support:'? Sokongan',
     sidebar_masterName:'Guru Lin', sidebar_phase:'Fasa Naga Kayu',
-    hero_badge:'Penjajaran Cakerawala',
-    hero_title:'Cari <span class="italic text-[#ffe088]">Tuah Jade<br/>Anda</span>',
-    hero_subtitle:'Menyelaraskan elemen peribadi anda dengan aliran alam semesta untuk mendedahkan jujukan yang makmur.',
+    hero_badge:'Singapore TOTO · Sekadar Hiburan',
+    hero_title:'Cuba Nasib <span class="italic text-[#ffe088]">TOTO<br/>Anda</span>',
+    hero_subtitle:'Masukkan tarikh lahir dan biarkan Ba Zi membimbing nombor anda. Cara seronok untuk TOTO Singapore — sekadar hiburan, bukan nasihat kewangan.',
     form_title:'Input Sarjana', form_nameLabel:'Nama Penuh', form_namePlaceholder:'Masukkan nama',
     form_dateLabel:'Tarikh Lahir', form_timeLabel:'Masa Lahir', form_optional:'(pilihan)',
     form_calcBtn:'Kira Manifestasi', form_errorDate:'Sila masukkan tarikh lahir anda untuk memulakan pengiraan.',
@@ -740,17 +765,22 @@ const TRANSLATIONS = {
     biancai_month_piancai:'Bulan ini membawa tenaga 偏財 — tuah kekayaan sederhana dalam tempoh ini.',
     biancai_zhengcai_day:'Hari ini membawa 正財 (Kekayaan Langsung) — keuntungan tetap diutamakan.',
     biancai_no_wealth:'Tiada bintang kekayaan aktif dalam carta hari ini.',
-    biancai_why_title:'Mengapa Tiada Kekayaan Hari Ini',
-    biancai_dm_label:'Hari Utama Anda',
-    biancai_wealth_el_label:'Elemen Kekayaan Diperlukan',
-    biancai_today_stem_label:'Batang Hari Ini',
-    biancai_relation_label:'Hubungan dengan Anda',
-    biancai_look_for:'Bintang kekayaan aktif pada hari',
-    biancai_or:'atau',
-    biancai_day_suffix:'',
+    biancai_analysis_label:'Mengapa Tiada Bintang Kekayaan Hari Ini?',
+    biancai_analysis_label_active:'Bacaan Kekayaan Hari Ini',
+    biancai_next_label:'Hari TOTO Bertuah Seterusnya',
+    biancai_next_days_label:'{n} hari lagi',
+    biancai_dm_intro:'Tuan Hari anda ialah {yy} {el} ({stem}).',
+    biancai_piancai_el:'Elemen 偏財 anda ialah {el} — polariti sama seperti anda.',
+    biancai_zhengcai_el:'Elemen 正財 anda ialah {el} — polariti berlawanan.',
+    biancai_today_day_is:'Batang hari ini ialah {stem} ({el}) — ',
+    biancai_clash_reason:'ini berlanggar dengan Tuan Hari anda, menahan tenaga kekayaan.',
+    biancai_neutral_reason:'tiada hubungan kekayaan langsung dengan carta anda.',
+    biancai_zhengcai_reason:'ini adalah bintang 正財 anda — kekayaan tetap, bukan tuah.',
+    biancai_hour_tip:'Walaupun bukan hari kekayaan, waktu 偏財 masih berlaku hari ini.',
+    biancai_empty_prompt:'Masukkan tarikh lahir anda untuk mendedahkan ramalan bintang kekayaan.',
     footer_scholarPath:'Laluan Sarjana', footer_privacy:'Dasar Privasi',
     footer_lunar:'Kalendar Lunar', footer_terms:'Syarat Perkhidmatan',
-    footer_copyright:'© 2024 Jade & Prosperity Metaphysics. Hak Cipta Terpelihara.',
+    footer_copyright:'© 2024 LuckyPillar. Hak Cipta Terpelihara.',
     // ── Meihua UI (ms) ──
     mh_banner_badge:'Oracle Dinasti Song', mh_banner_desc:'Dicipta oleh Shao Kangjie, oracle ini menerbit heksagram dari nombor primordial, mendedahkan nasib melalui kitaran elemen.',
     mh_heaven_earth:'Langit & Bumi',
@@ -932,9 +962,6 @@ function applyLang() {
       .replace('{el}', t('el_'+yp.element)).replace('{animal}', t('animal_'+yp.animal))
       .replace('{yy}', t('yy_'+dm.yinYang)).replace('{dayEl}', t('el_'+dm.element));
     document.getElementById('drawerPhase')?.textContent && (document.getElementById('drawerPhase').textContent = _phaseText);
-    if (!document.getElementById('elementInteraction').classList.contains('hidden')) {
-      renderElementDynamics(currentElements, dm.element);
-    }
   } else {
     renderInitial();
     document.getElementById('dayMasterLabel').textContent = t('bazi_dayMasterDash');
@@ -962,10 +989,6 @@ const BRANCH_EL=['Water','Earth','Wood','Wood','Earth','Fire','Fire','Earth','Me
 const STEM_PIN  = ['Jiǎ','Yǐ','Bǐng','Dīng','Wù','Jǐ','Gēng','Xīn','Rén','Guǐ'];
 const BRANCH_PIN= ['Zǐ','Chǒu','Yín','Mǎo','Chén','Sì','Wǔ','Wèi','Shēn','Yǒu','Xū','Hài'];
 
-const SOLAR_TERM_DAY = [6, 4, 6, 5, 6, 6, 7, 7, 8, 8, 7, 7];
-const MONTH_BRANCH_AFTER  = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0];
-const MONTH_BRANCH_BEFORE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-
 const EL_THEME = {
   Wood:  { bg: '#dcf5ec', border: '#86d7ac', text: '#00321f', icon: '#004b31', barColor: '#86d7ac' },
   Fire:  { bg: '#ffdad6', border: '#ffb4ab', text: '#93000a', icon: '#ba1a1a', barColor: '#ffb4ab' },
@@ -988,51 +1011,8 @@ const EL_NUMBERS = {
   Earth: [5,10,15,20,25,30,35,40,45]
 };
 
-function getJDN(year, month, day) {
-  const a = Math.floor((14 - month) / 12);
-  const y = year + 4800 - a;
-  const m = month + 12 * a - 3;
-  return day + Math.floor((153 * m + 2) / 5) + 365 * y +
-         Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
-}
-
-function chineseYear(y, m, d) {
-  return (m < 2 || (m === 2 && d < SOLAR_TERM_DAY[1])) ? y - 1 : y;
-}
-
-function yearPillar(y, m, d) {
-  const cy = chineseYear(y, m, d);
-  const si = ((cy - 4) % 10 + 10) % 10;
-  const bi = ((cy - 4) % 12 + 12) % 12;
-  return pillar(si, bi);
-}
-
-function monthPillar(y, m, d, yearStemIdx) {
-  const idx = m - 1;
-  const bi = d >= SOLAR_TERM_DAY[idx] ? MONTH_BRANCH_AFTER[idx] : MONTH_BRANCH_BEFORE[idx];
-  const stemBase = ((yearStemIdx % 5) * 2 + 2) % 10;
-  const offset   = (bi - 2 + 12) % 12;
-  const si       = (stemBase + offset) % 10;
-  return pillar(si, bi);
-}
-
-function dayPillar(y, m, d) {
-  const jdn  = getJDN(y, m, d);
-  const ref  = getJDN(1900, 1, 1);
-  const cycle= ((jdn - ref + 10) % 60 + 60) % 60;
-  return pillar(cycle % 10, cycle % 12);
-}
-
-function hourPillar(hour, minute, dayStemIdx) {
-  const total = hour * 60 + minute;
-  let bi;
-  if (total >= 23 * 60 || total < 60) bi = 0;
-  else bi = Math.floor((total - 60) / 120) + 1;
-  const stemBase = (dayStemIdx % 5) * 2;
-  const si = (stemBase + bi) % 10;
-  return pillar(si, bi);
-}
-
+// ── lunar-javascript wrapper ──
+// Converts a lunar-javascript gan-zhi string pair into our pillar object
 function pillar(si, bi) {
   return {
     stem: STEMS[si], stemIdx: si, stemPin: STEM_PIN[si],
@@ -1040,6 +1020,42 @@ function pillar(si, bi) {
     element: STEM_EL[si], yinYang: STEM_YY[si],
     branchElement: BRANCH_EL[bi], animal: ANIMALS[bi]
   };
+}
+
+function lunarPillarFrom(ganZhi) {
+  const si = STEMS.indexOf(ganZhi.charAt(0));
+  const bi = BRANCHES.indexOf(ganZhi.charAt(1));
+  return pillar(si, bi);
+}
+
+function getBaZi(y, m, d, hr, min) {
+  const solar = Solar.fromYmdHms(y, m, d, hr || 0, min || 0, 0);
+  const lunar = solar.getLunar();
+  const bazi  = lunar.getEightChar();
+  return {
+    year:  lunarPillarFrom(bazi.getYear()),
+    month: lunarPillarFrom(bazi.getMonth()),
+    day:   lunarPillarFrom(bazi.getDay()),
+    hour:  lunarPillarFrom(bazi.getTime())
+  };
+}
+
+function yearPillar(y, m, d) {
+  return getBaZi(y, m, d, 12, 0).year;
+}
+
+function monthPillar(y, m, d, _yearStemIdx) {
+  return getBaZi(y, m, d, 12, 0).month;
+}
+
+function dayPillar(y, m, d) {
+  return getBaZi(y, m, d, 12, 0).day;
+}
+
+function hourPillar(hour, minute, _dayStemIdx) {
+  // Need a date context; use SGT today
+  const sgt = sgtNow();
+  return getBaZi(sgt.getFullYear(), sgt.getMonth()+1, sgt.getDate(), hour, minute).hour;
 }
 
 function countElements(pillars) {
@@ -1078,10 +1094,11 @@ function luckyNumbers(pillars, elemCounts) {
   const tY = sgt.getFullYear(), tM = sgt.getMonth() + 1, tD = sgt.getDate();
   const tH = sgt.getHours();
 
-  const todayYP = yearPillar(tY, tM, tD);
-  const todayMP = monthPillar(tY, tM, tD, todayYP.stemIdx);
-  const todayDP = dayPillar(tY, tM, tD);
-  const todayHP = hourPillar(tH, 0, todayDP.stemIdx);
+  const todayBZ = getBaZi(tY, tM, tD, tH, 0);
+  const todayYP = todayBZ.year;
+  const todayMP = todayBZ.month;
+  const todayDP = todayBZ.day;
+  const todayHP = todayBZ.hour;
 
   // ── Seed: birth chart × today's date × realign ──
   // Changes every day for the same person
@@ -1197,19 +1214,6 @@ function wealthGodOf(userDayStemIdx, targetStemIdx) {
   return dmYY === tYY ? 'piancai' : 'zhengcai';
 }
 
-// Returns the Ten God relationship code of targetStemIdx relative to userDayStemIdx
-function tenGodRelation(dmStemIdx, targetStemIdx) {
-  const dmEl = STEM_EL[dmStemIdx], dmYY = STEM_YY[dmStemIdx];
-  const tEl  = STEM_EL[targetStemIdx];
-  const sameYY = dmYY === STEM_YY[targetStemIdx];
-  if (tEl === dmEl)                   return sameYY ? 'bijian'    : 'jiecai';
-  if (EL_PRODUCES[dmEl] === tEl)      return sameYY ? 'shishen'   : 'shangguan';
-  if (EL_CONTROLLED_BY[tEl] === dmEl) return sameYY ? 'piancai'   : 'zhengcai';
-  if (EL_CONTROLLED_BY[dmEl] === tEl) return sameYY ? 'qisha'     : 'zhengguan';
-  if (EL_PRODUCES[tEl] === dmEl)      return sameYY ? 'pianyin'   : 'zhengyin';
-  return 'other';
-}
-
 // Convert earthly branch index (0-11) to time range string
 function branchToHourRange(bi) {
   if (bi === 0) return '23:00–01:00';
@@ -1218,102 +1222,114 @@ function branchToHourRange(bi) {
   return `${String(start).padStart(2,'0')}:00–${String(end).padStart(2,'0')}:00`;
 }
 
-function checkTodayBiancai(userPillars) {
-  const userDayStemIdx = userPillars[2].stemIdx;
-  const dmEl  = STEM_EL[userDayStemIdx];
-  const dmYY  = STEM_YY[userDayStemIdx];
-  const dmStem = STEMS[userDayStemIdx];
-  const wealthEl = dmControlsEl(dmEl);
+function checkTodayBiancai(userDayStemIdx) {
+  const sgt = sgtNow();
+  const y = sgt.getFullYear(), m = sgt.getMonth() + 1, d = sgt.getDate();
 
-  const now = new Date();
-  const y = now.getFullYear(), m = now.getMonth() + 1, d = now.getDate();
-
-  const todayYP = yearPillar(y, m, d);
-  const todayMP = monthPillar(y, m, d, todayYP.stemIdx);
-  const todayDP = dayPillar(y, m, d);
+  const todayBZ = getBaZi(y, m, d, 12, 0);
+  const todayDP = todayBZ.day;
+  const todayMP = todayBZ.month;
 
   const dayGod   = wealthGodOf(userDayStemIdx, todayDP.stemIdx);
   const monthGod = wealthGodOf(userDayStemIdx, todayMP.stemIdx);
 
-  // Ten God relation of today's day stem to user's Day Master
-  const dayRelation   = tenGodRelation(userDayStemIdx, todayDP.stemIdx);
-  const monthRelation = tenGodRelation(userDayStemIdx, todayMP.stemIdx);
-
-  // Find all 偏财 hours in today (iterate all 12 earthly branches)
+  // Find all 偏财 hours in today
   const piancaiHours = [];
   for (let bi = 0; bi < 12; bi++) {
-    const stemBase = (todayDP.stemIdx % 5) * 2;
-    const si = (stemBase + bi) % 10;
-    if (wealthGodOf(userDayStemIdx, si) === 'piancai') {
-      piancaiHours.push({ bi, si, range: branchToHourRange(bi) });
+    const hBZ = getBaZi(y, m, d, bi === 0 ? 23 : bi * 2 - 1, 30);
+    if (wealthGodOf(userDayStemIdx, hBZ.hour.stemIdx) === 'piancai') {
+      piancaiHours.push({ bi, si: hBZ.hour.stemIdx, range: branchToHourRange(bi) });
     }
   }
 
-  // The two stems that would activate wealth for this Day Master
-  const piancaiStemIdx  = STEM_EL.findIndex((el, i) => el === wealthEl && STEM_YY[i] === dmYY);
-  const zhengcaiStemIdx = STEM_EL.findIndex((el, i) => el === wealthEl && STEM_YY[i] !== dmYY);
-  const wealthStems = {
-    piancai:  piancaiStemIdx  >= 0 ? STEMS[piancaiStemIdx]  : null,
-    zhengcai: zhengcaiStemIdx >= 0 ? STEMS[zhengcaiStemIdx] : null,
-  };
+  // Scan next 60 days for 偏财 days (full 60-cycle guarantees finding them)
+  const nextLuckyDays = [];
+  const scanDate = new Date(sgt);
+  scanDate.setDate(scanDate.getDate() + 1); // start from tomorrow
+  for (let i = 1; i <= 60 && nextLuckyDays.length < 5; i++) {
+    const sy = scanDate.getFullYear(), sm = scanDate.getMonth() + 1, sd = scanDate.getDate();
+    const bz = getBaZi(sy, sm, sd, 12, 0);
+    const god = wealthGodOf(userDayStemIdx, bz.day.stemIdx);
+    if (god === 'piancai') {
+      const monthGodFuture = wealthGodOf(userDayStemIdx, bz.month.stemIdx);
+      nextLuckyDays.push({
+        date: new Date(scanDate),
+        daysAway: i,
+        pillar: bz.day,
+        monthBoost: monthGodFuture === 'piancai'
+      });
+    }
+    scanDate.setDate(scanDate.getDate() + 1);
+  }
 
-  return {
-    dayGod, monthGod, piancaiHours, todayDP, todayMP,
-    dmEl, dmYY, dmStem, wealthEl, wealthStems,
-    dayRelation, monthRelation,
-    userPillars,
-  };
+  return { dayGod, monthGod, piancaiHours, todayDP, todayMP, nextLuckyDays, userDayStemIdx };
 }
 
 let lastBiancaiResult = null;
 
+function showSection(id, show) {
+  const el = document.getElementById(id);
+  el.classList.toggle('hidden', !show);
+  el.classList.toggle('flex', show);
+}
+
+function renderBiancaiEmpty() {
+  const card = document.getElementById('biancaiCard');
+  card.style.background = '#f2f4ef';
+  document.getElementById('biancaiIconBg').style.background = '#9eaa9e';
+  document.getElementById('biancaiTitle').textContent = t('biancai_title');
+  document.getElementById('biancaiSubtitle').textContent = t('biancai_subtitle');
+  document.getElementById('biancaiPillarLabel').textContent = t('biancai_today_pillars');
+  document.getElementById('biancaiPillarValue').textContent = '—';
+  document.getElementById('biancaiStarLabel').textContent = '';
+  document.getElementById('biancaiStarValue').textContent = '—';
+
+  const verdict = document.getElementById('biancaiVerdict');
+  verdict.style.background = '#ecefea';
+  verdict.innerHTML = `
+    <p class="font-headline font-bold text-[#9eaa9e] text-base">${t('biancai_title')}</p>
+    <p class="text-[#9eaa9e] text-xs leading-relaxed mt-1">${t('biancai_empty_prompt')}</p>
+  `;
+
+  showSection('biancaiAnalysis', false);
+  showSection('biancaiHoursSection', false);
+  showSection('biancaiNextSection', false);
+}
+
 function renderBiancaiCard(result) {
   lastBiancaiResult = result;
-  const card = document.getElementById('biancaiCard');
-  card.classList.remove('hidden');
-  card.classList.add('flex');
 
+  const { dayGod, monthGod, piancaiHours, todayDP, todayMP, nextLuckyDays, userDayStemIdx } = result;
+  const hasPiancai = dayGod === 'piancai' || monthGod === 'piancai';
+
+  const card   = document.getElementById('biancaiCard');
+  const iconBg = document.getElementById('biancaiIconBg');
+  const verdict = document.getElementById('biancaiVerdict');
+
+  // ── Header ──
   document.getElementById('biancaiTitle').textContent    = t('biancai_title');
   document.getElementById('biancaiSubtitle').textContent = t('biancai_subtitle');
   document.getElementById('biancaiPillarLabel').textContent = t('biancai_today_pillars');
-  document.getElementById('biancaiHoursLabel').textContent  = t('biancai_lucky_hours');
-
-  const { dayGod, monthGod, piancaiHours, todayDP,
-          dmEl, dmYY, dmStem, wealthEl, wealthStems,
-          dayRelation, monthRelation } = result;
-  const hasPiancai = dayGod === 'piancai' || monthGod === 'piancai';
-
-  // Today's pillar glyph
   document.getElementById('biancaiPillarValue').textContent = `${todayDP.stem}${todayDP.branch}`;
 
-  // Star status
+  // ── Star badge ──
   const starLabel = document.getElementById('biancaiStarLabel');
   const starValue = document.getElementById('biancaiStarValue');
   if (dayGod === 'piancai') {
-    starLabel.textContent = t('biancai_star_active');
-    starLabel.style.color = '#004b31';
-    starValue.textContent = '偏財 ★';
-    starValue.style.color = '#735c00';
-  } else if (dayGod === 'zhengcai') {
-    starLabel.textContent = t('biancai_star_absent');
-    starLabel.style.color = '#404943';
-    starValue.textContent = '正財';
-    starValue.style.color = '#404943';
+    starLabel.textContent = t('biancai_star_active'); starLabel.style.color = '#004b31';
+    starValue.textContent = '偏財 ★'; starValue.style.color = '#735c00';
   } else if (monthGod === 'piancai') {
-    starLabel.textContent = t('biancai_star_active');
-    starLabel.style.color = '#004b31';
-    starValue.textContent = '偏財 (月) ★';
-    starValue.style.color = '#735c00';
+    starLabel.textContent = t('biancai_star_active'); starLabel.style.color = '#004b31';
+    starValue.textContent = '偏財(月)★'; starValue.style.color = '#735c00';
+  } else if (dayGod === 'zhengcai') {
+    starLabel.textContent = t('biancai_star_absent'); starLabel.style.color = '#404943';
+    starValue.textContent = '正財'; starValue.style.color = '#404943';
   } else {
-    starLabel.textContent = t('biancai_star_absent');
-    starLabel.style.color = '#9eaa9e';
-    starValue.textContent = '—';
-    starValue.style.color = '#9eaa9e';
+    starLabel.textContent = t('biancai_star_absent'); starLabel.style.color = '#9eaa9e';
+    starValue.textContent = '—'; starValue.style.color = '#9eaa9e';
   }
 
-  // Card background & verdict block
-  const verdict = document.getElementById('biancaiVerdict');
-  const iconBg  = document.getElementById('biancaiIconBg');
+  // ── Card theme ──
   if (hasPiancai) {
     card.style.background = '#dcf5ec';
     iconBg.style.background = '#004b31';
@@ -1321,7 +1337,7 @@ function renderBiancaiCard(result) {
     const detailMsg = dayGod === 'piancai' ? t('biancai_day_piancai') : t('biancai_month_piancai');
     verdict.innerHTML = `
       <p class="font-headline font-bold text-[#ffe088] text-base">${t('biancai_star_active')}</p>
-      <p class="text-[#bcedda] text-xs leading-relaxed mt-0.5">${detailMsg}</p>
+      <p class="text-[#bcedda] text-xs leading-relaxed mt-1">${detailMsg}</p>
       <p class="text-[#ffe088] font-bold text-sm mt-2">${t('biancai_recommend_buy')}</p>
     `;
   } else {
@@ -1329,116 +1345,104 @@ function renderBiancaiCard(result) {
     iconBg.style.background = '#9eaa9e';
     verdict.style.background = '#ecefea';
     const detailMsg = dayGod === 'zhengcai' ? t('biancai_zhengcai_day') : t('biancai_no_wealth');
-
-    // Ten God name + wealth-miss explanation (multilingual)
-    const TG_NAME = {
-      bijian:    {en:'比肩 Friend Star',       zh:'比肩 · 同类助力',    ms:'比肩 Rakan'},
-      jiecai:    {en:'劫財 Rob Wealth',         zh:'劫财 · 分夺财气',    ms:'劫財 Rampas Kekayaan'},
-      shishen:   {en:'食神 Eating God',         zh:'食神 · 生财之源',    ms:'食神 Dewa Makanan'},
-      shangguan: {en:'傷官 Hurting Officer',    zh:'伤官 · 破财之兆',    ms:'傷官 Pegawai Cedera'},
-      qisha:     {en:'七殺 Seven Killings',     zh:'七杀 · 克制日元',    ms:'七殺 Tujuh Pembunuhan'},
-      zhengguan: {en:'正官 Direct Officer',     zh:'正官 · 官星护身',    ms:'正官 Pegawai Langsung'},
-      pianyin:   {en:'偏印 Indirect Resource',  zh:'偏印 · 资源滋养',    ms:'偏印 Sumber Tidak Langsung'},
-      zhengyin:  {en:'正印 Direct Resource',    zh:'正印 · 印星护卫',    ms:'正印 Sumber Langsung'},
-      piancai:   {en:'偏財 Side Wealth',        zh:'偏财 · 偏财星旺',    ms:'偏財 Kekayaan Sampingan'},
-      zhengcai:  {en:'正財 Direct Wealth',      zh:'正财 · 正财星旺',    ms:'正財 Kekayaan Langsung'},
-      other:     {en:'Neutral',                 zh:'中性',               ms:'Neutral'},
-    };
-    const TG_MISS = {
-      bijian:    {en:'Same-element energy creates rivalry, not wealth flow.',
-                  zh:'同元相聚，竞争分财，财气难聚。',
-                  ms:'Tenaga elemen sama mencetus persaingan, bukan aliran kekayaan.'},
-      jiecai:    {en:'Rob Wealth energy disperses your wealth today — avoid speculation.',
-                  zh:'劫财当道，财气外泄，今日不宜投机。',
-                  ms:'Tenaga Rampas Kekayaan menyelerakan kekayaan anda — elakkan spekulasi.'},
-      shishen:   {en:'Eating God fuels output and creativity, not windfall wealth.',
-                  zh:'食神当令，才华发挥，非偏财之象。',
-                  ms:'Dewa Makanan mendorong kreativiti, bukan kekayaan luar jangka.'},
-      shangguan: {en:'Hurting Officer can erode wealth and reputation — stay cautious.',
-                  zh:'伤官临日，财官俱损，宜低调行事。',
-                  ms:'Pegawai Cedera boleh menghakis kekayaan — berhati-hati.'},
-      qisha:     {en:'Seven Killings pressures your Day Master — obstacles prevail today.',
-                  zh:'七杀压身，日元受制，今日宜守不宜进。',
-                  ms:'Tujuh Pembunuhan menekan Hari Utama anda — halangan mendominasi.'},
-      zhengguan: {en:'Direct Officer brings discipline and structure, not speculative luck.',
-                  zh:'正官当令，稳健守规，不宜博彩。',
-                  ms:'Pegawai Langsung membawa disiplin, bukan tuah spekulatif.'},
-      pianyin:   {en:'Indirect Resource nourishes your mind but keeps wealth stars dormant.',
-                  zh:'偏印滋养心智，利于学习，但财星未动。',
-                  ms:'Sumber Tidak Langsung memupuk minda — bintang kekayaan kekal dorman.'},
-      zhengyin:  {en:'Direct Resource shields and supports you, but wealth is not activated.',
-                  zh:'正印护卫日元，平安稳健，但财星未启。',
-                  ms:'Sumber Langsung melindungi anda, tetapi kekayaan tidak diaktifkan.'},
-      other:     {en:'Today\'s energy has no direct wealth relationship with your Day Master.',
-                  zh:'今日天干与日元无财星关系。',
-                  ms:'Tenaga hari ini tiada hubungan kekayaan langsung dengan Hari Utama anda.'},
-    };
-    const EL_NAME = {
-      en:  {Wood:'Wood',  Fire:'Fire',  Earth:'Earth', Metal:'Metal', Water:'Water'},
-      zh:  {Wood:'木',    Fire:'火',    Earth:'土',    Metal:'金',    Water:'水'},
-      ms:  {Wood:'Kayu',  Fire:'Api',   Earth:'Tanah', Metal:'Logam', Water:'Air'},
-    };
-    const YY_NAME = {
-      en: {Yang:'Yang', Yin:'Yin'},
-      zh: {Yang:'阳',   Yin:'阴'},
-      ms: {Yang:'Yang', Yin:'Yin'},
-    };
-    const lang = currentLang in EL_NAME ? currentLang : 'en';
-    const tgName  = (TG_NAME[dayRelation]  || TG_NAME.other)[lang];
-    const tgMiss  = (TG_MISS[dayRelation]  || TG_MISS.other)[lang];
-    const dmElStr = EL_NAME[lang][dmEl] || dmEl;
-    const wlElStr = EL_NAME[lang][wealthEl] || wealthEl;
-    const dmYYStr = YY_NAME[lang][dmYY] || dmYY;
-    const todayElStr = EL_NAME[lang][STEM_EL[todayDP.stemIdx]] || STEM_EL[todayDP.stemIdx];
-    const todayYYStr = YY_NAME[lang][STEM_YY[todayDP.stemIdx]] || STEM_YY[todayDP.stemIdx];
-
-    const lookFor = wealthStems.piancai && wealthStems.zhengcai
-      ? `${t('biancai_look_for')} <strong>${wealthStems.piancai}</strong> (偏財) ${t('biancai_or')} <strong>${wealthStems.zhengcai}</strong> (正財) ${t('biancai_day_suffix')}`
-      : '';
-
     verdict.innerHTML = `
       <p class="font-headline font-bold text-[#404943] text-base">${t('biancai_star_absent')}</p>
-      <p class="text-[#404943] text-xs leading-relaxed mt-0.5 opacity-70">${detailMsg}</p>
-
-      <div class="mt-3 rounded-xl bg-white/70 p-3 flex flex-col gap-0">
-        <p class="text-[9px] font-bold uppercase tracking-wider text-[#404943] opacity-60 mb-2">${t('biancai_why_title')}</p>
-
-        <div class="flex items-baseline justify-between py-1 border-b border-[#404943]/10">
-          <span class="text-[10px] text-[#404943] opacity-60">${t('biancai_dm_label')}</span>
-          <span class="text-[10px] font-bold text-[#004b31]">${dmStem} · ${dmYYStr} ${dmElStr}</span>
-        </div>
-        <div class="flex items-baseline justify-between py-1 border-b border-[#404943]/10">
-          <span class="text-[10px] text-[#404943] opacity-60">${t('biancai_wealth_el_label')}</span>
-          <span class="text-[10px] font-bold text-[#735c00]">${wlElStr} (${wealthStems.piancai || ''}·${wealthStems.zhengcai || ''})</span>
-        </div>
-        <div class="flex items-baseline justify-between py-1 border-b border-[#404943]/10">
-          <span class="text-[10px] text-[#404943] opacity-60">${t('biancai_today_stem_label')}</span>
-          <span class="text-[10px] font-bold text-[#404943]">${todayDP.stem} · ${todayYYStr} ${todayElStr}</span>
-        </div>
-        <div class="flex items-baseline justify-between py-1 border-b border-[#404943]/10">
-          <span class="text-[10px] text-[#404943] opacity-60">${t('biancai_relation_label')}</span>
-          <span class="text-[10px] font-bold text-[#6b4c4c]">${tgName}</span>
-        </div>
-        <p class="text-[10px] text-[#404943] opacity-70 leading-relaxed pt-2">${tgMiss}</p>
-        ${lookFor ? `<p class="text-[10px] text-[#404943] opacity-50 pt-1.5">${lookFor}</p>` : ''}
-      </div>
-
+      <p class="text-[#404943] text-xs leading-relaxed mt-1 opacity-70">${detailMsg}</p>
       <p class="text-[#9eaa9e] text-sm mt-2">${t('biancai_no_buy')}</p>
     `;
   }
 
-  // Lucky hours section
-  const hoursSection = document.getElementById('biancaiHoursSection');
-  const hoursList    = document.getElementById('biancaiHoursList');
+  // ── Why analysis ──
+  const dmEl   = STEM_EL[userDayStemIdx];
+  const dmYY   = STEM_YY[userDayStemIdx];
+  const dmStem = STEMS[userDayStemIdx];
+  const wealthEl   = Object.entries(EL_CONTROLLED_BY).find(([k,v]) => v === dmEl)?.[0];
+  const wealthStemSameYY = STEMS.find((s, i) => STEM_EL[i] === wealthEl && STEM_YY[i] === dmYY);
+  const wealthStemDiffYY = STEMS.find((s, i) => STEM_EL[i] === wealthEl && STEM_YY[i] !== dmYY);
+
+  const analysisLabel = document.getElementById('biancaiAnalysisLabel');
+  analysisLabel.textContent = hasPiancai ? t('biancai_analysis_label_active') : t('biancai_analysis_label');
+
+  const analysisBody = document.getElementById('biancaiAnalysisBody');
+  const rows = [];
+
+  // Row 1: DM intro
+  rows.push(`<div class="bg-white rounded-xl px-3 py-2 text-xs text-[#404943] leading-relaxed">
+    ${t('biancai_dm_intro').replace('{yy}', t('yy_'+dmYY)).replace('{el}', t('el_'+dmEl)).replace('{stem}', dmStem)}
+  </div>`);
+
+  // Row 2: Wealth elements
+  rows.push(`<div class="bg-white rounded-xl px-3 py-2 text-xs text-[#404943] leading-relaxed flex flex-col gap-1">
+    <span>${t('biancai_piancai_el').replace('{el}', t('el_'+wealthEl))} <span class="font-bold text-[#735c00]">${wealthStemSameYY || ''}天干</span></span>
+    <span>${t('biancai_zhengcai_el').replace('{el}', t('el_'+wealthEl))} <span class="font-bold text-[#404943]">${wealthStemDiffYY || ''}天干</span></span>
+  </div>`);
+
+  // Row 3: Today's day stem relationship
+  let dayReason = '';
+  if (dayGod === 'piancai')      dayReason = `<span class="text-[#004b31] font-semibold">✓ 偏財星</span>`;
+  else if (dayGod === 'zhengcai') dayReason = `<span class="text-[#404943] font-semibold">正財星 — ${t('biancai_zhengcai_reason')}</span>`;
+  else {
+    const todayDmEl = STEM_EL[todayDP.stemIdx];
+    if (EL_CONTROLLED_BY[dmEl] === todayDmEl || EL_CONTROLLED_BY[todayDmEl] === dmEl) {
+      dayReason = t('biancai_clash_reason');
+    } else {
+      dayReason = t('biancai_neutral_reason');
+    }
+  }
+  rows.push(`<div class="bg-white rounded-xl px-3 py-2 text-xs text-[#404943] leading-relaxed">
+    ${t('biancai_today_day_is').replace('{stem}', todayDP.stem).replace('{el}', t('el_'+STEM_EL[todayDP.stemIdx]))} ${dayReason}
+  </div>`);
+
+  // Row 4: if no wealth day but there are piancai hours
+  if (!hasPiancai && piancaiHours.length > 0) {
+    rows.push(`<div class="bg-white rounded-xl px-3 py-2 text-xs text-[#735c00] leading-relaxed font-medium">
+      ⚡ ${t('biancai_hour_tip')}
+    </div>`);
+  }
+
+  analysisBody.innerHTML = rows.join('');
+  showSection('biancaiAnalysis', true);
+
+  // ── Lucky hours ──
+  document.getElementById('biancaiHoursLabel').textContent = t('biancai_lucky_hours');
   if (piancaiHours.length > 0) {
-    hoursSection.classList.remove('hidden');
-    hoursSection.classList.add('flex');
-    hoursList.innerHTML = piancaiHours.map(h =>
+    document.getElementById('biancaiHoursList').innerHTML = piancaiHours.map(h =>
       `<span class="text-xs font-bold px-3 py-1.5 rounded-full bg-[#004b31] text-[#bcedda]">${h.range}</span>`
     ).join('');
+    showSection('biancaiHoursSection', true);
   } else {
-    hoursSection.classList.add('hidden');
-    hoursSection.classList.remove('flex');
+    showSection('biancaiHoursSection', false);
+  }
+
+  // ── Next lucky days ──
+  document.getElementById('biancaiNextLabel').textContent = t('biancai_next_label');
+  if (nextLuckyDays.length > 0) {
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const daysFull = {en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], zh:['日','一','二','三','四','五','六'], ms:['Ahd','Isn','Sel','Rab','Kha','Jum','Sab']};
+    const wkDays = daysFull[currentLang] || daysFull.en;
+    document.getElementById('biancaiNextList').innerHTML = nextLuckyDays.map(item => {
+      const ds = item.date;
+      const dateLabel = `${ds.getFullYear()}-${String(ds.getMonth()+1).padStart(2,'0')}-${String(ds.getDate()).padStart(2,'0')}`;
+      const wkLabel   = wkDays[ds.getDay()];
+      const daysAway  = t('biancai_next_days_label').replace('{n}', item.daysAway);
+      const boost     = item.monthBoost ? `<span class="ml-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#ffe088] text-[#241a00]">月令加持</span>` : '';
+      return `
+        <div class="bg-white rounded-xl px-3 py-2.5 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-[#dcf5ec] flex items-center justify-center shrink-0">
+              <span class="font-headline text-xs font-bold text-[#004b31]">${item.pillar.stem}${item.pillar.branch}</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-[#00321f]">${dateLabel} <span class="font-normal text-[#404943]">${wkLabel}</span>${boost}</p>
+              <p class="text-[10px] text-[#9eaa9e]">${t('el_'+item.pillar.element)} · 偏財</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-[#735c00] whitespace-nowrap">${daysAway}</span>
+        </div>`;
+    }).join('');
+    showSection('biancaiNextSection', true);
+  } else {
+    showSection('biancaiNextSection', false);
   }
 }
 
@@ -1573,7 +1577,7 @@ function updateSubtitle(pillars) {
   const dateStr = sgt.getFullYear() + '-'
     + String(sgt.getMonth()+1).padStart(2,'0') + '-'
     + String(sgt.getDate()).padStart(2,'0');
-  const todayDP = dayPillar(sgt.getFullYear(), sgt.getMonth()+1, sgt.getDate());
+  const todayDP = getBaZi(sgt.getFullYear(), sgt.getMonth()+1, sgt.getDate(), 12, 0).day;
   document.getElementById('manifestSubtitle').textContent =
     t('manifest_subtitleDynamic')
       .replace('{yy}', t('yy_' + p.yinYang))
@@ -1609,10 +1613,11 @@ function calculate() {
   let hr = 0, min = 0;
   if (timeStr) { [hr, min] = timeStr.split(':').map(Number); }
 
-  const yp = yearPillar(y, m, d);
-  const mp = monthPillar(y, m, d, yp.stemIdx);
-  const dp = dayPillar(y, m, d);
-  const hp = hourPillar(hr, min, dp.stemIdx);
+  const bz = getBaZi(y, m, d, hr, min);
+  const yp = bz.year;
+  const mp = bz.month;
+  const dp = bz.day;
+  const hp = bz.hour;
   const pillars = [yp, mp, dp, hp];
   const counts  = countElements(pillars);
 
@@ -1641,10 +1646,9 @@ function calculate() {
   document.getElementById('masterReading').classList.remove('hidden');
   document.getElementById('masterReading').classList.add('flex');
 
-  renderElementDynamics(counts, dp.element);
-  document.getElementById('elementInteraction').classList.remove('hidden');
 
-  renderBiancaiCard(checkTodayBiancai(pillars));
+
+  renderBiancaiCard(checkTodayBiancai(dp.stemIdx));
 
   document.querySelector('section.lg\\:col-span-8').scrollIntoView({ behavior:'smooth', block:'start' });
 }
@@ -1657,6 +1661,7 @@ function realign() {
 
 // Boot
 setLang('en');
+renderBiancaiEmpty();
 
 </script>
 </body>
