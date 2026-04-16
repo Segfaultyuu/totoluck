@@ -6,6 +6,8 @@
   <title>LuckyPillar — TOTO Fortune</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pinyin-pro/dist/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/iztro/dist/iztro.min.js"></script>
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
   <script>
     tailwind.config = {
@@ -1066,6 +1068,7 @@ const TRANSLATIONS = {
 
 let currentLang = 'en';
 let currentUserName = null;
+let currentBirthData = null;
 
 function t(key) {
   return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.en[key] || key;
@@ -1239,6 +1242,58 @@ function sgtNow() {
   return new Date(now.getTime() + (480 + now.getTimezoneOffset()) * 60000);
 }
 
+// ── 紫微斗数 (Zi Wei Dou Shu) Integration ──
+const ZIWEI_STAR_ELEMENT = {
+  '紫微':'Earth','天机':'Wood','太阳':'Fire','武曲':'Metal','天同':'Water',
+  '廉贞':'Fire','天府':'Earth','太阴':'Water','贪狼':'Wood','巨门':'Water',
+  '天相':'Water','天梁':'Earth','七杀':'Metal','破军':'Water'
+};
+const BRIGHTNESS_WEIGHT = { '庙':5, '旺':4, '利':3, '平':2, '陷':1 };
+// Key palaces for wealth generation & their importance multipliers
+const ZW_KEY_PALACES = [
+  { key:'财帛', mult:3 },  // Wealth palace — primary
+  { key:'福德', mult:2 },  // Fortune/Virtue palace — secondary
+  { key:'官禄', mult:1 },  // Career palace — tertiary
+];
+
+function hourToTimeIndex(hour) {
+  // Convert 24hr → 时辰 index 0-11 (子=0, 丑=1 ... 亥=11)
+  return hour === 23 ? 0 : Math.floor((hour + 1) / 2);
+}
+
+function getZiWeiWeights(y, m, d, hr) {
+  try {
+    const dateStr  = `${y}-${m}-${d}`;
+    const timeIdx  = hourToTimeIndex(hr);
+    const chart    = iztro.astro.bySolar(dateStr, timeIdx, '男', true, 'zh-CN');
+    const weights  = { Wood:1, Fire:1, Earth:1, Metal:1, Water:1 };
+
+    chart.palaces.forEach(palace => {
+      const match = ZW_KEY_PALACES.find(k => palace.name.includes(k.key));
+      if (!match) return;
+      palace.majorStars.forEach(star => {
+        const el = ZIWEI_STAR_ELEMENT[star.name];
+        const bw = BRIGHTNESS_WEIGHT[star.brightness] ?? 2;
+        if (el) weights[el] += bw * match.mult;
+      });
+    });
+
+    return weights;
+  } catch(e) {
+    return null; // fallback to Ba Zi weights
+  }
+}
+
+function normalizeName(name) {
+  if (!name) return '';
+  const str = name.trim();
+  if (/[\u4e00-\u9fff\u3400-\u4dbf]/.test(str) && typeof pinyinPro !== 'undefined') {
+    return pinyinPro.pinyin(str, { toneType: 'none', type: 'string' })
+                    .toLowerCase().replace(/\s+/g, '');
+  }
+  return str.toLowerCase().replace(/\s+/g, '');
+}
+
 function luckyNumbers(pillars, elemCounts) {
   const dayEl  = pillars[2].element;
   const favEls = favorableElements(elemCounts, dayEl);
@@ -1260,17 +1315,25 @@ function luckyNumbers(pillars, elemCounts) {
   const dateSeed  = tY * 10000 + tM * 100 + tD;
   const todaySeed = todayDP.stemIdx * 17 + todayDP.branchIdx * 31
                   + todayMP.stemIdx * 53 + todayHP.stemIdx * 11;
-  const seed = Math.imul(birthSeed + 1, dateSeed) + todaySeed * 97 + realignSeed * 37;
+  const nameSeed  = [...normalizeName(currentUserName)].reduce((a, c) => a + c.charCodeAt(0) * 31, 0);
+  const seed = Math.imul(birthSeed + 1, dateSeed) + todaySeed * 97 + realignSeed * 37 + nameSeed;
 
-  // ── Element weighting ──
-  const weights = { Wood:1, Fire:1, Earth:1, Metal:1, Water:1 };
+  // ── Element weighting (紫微斗数 primary, 八字 fallback) ──
+  const zwWeights = currentBirthData
+    ? getZiWeiWeights(currentBirthData.y, currentBirthData.m, currentBirthData.d, currentBirthData.hr)
+    : null;
 
-  // Birth-chart favorable elements
-  favEls.forEach(el => { if (el) weights[el] += 3; });
-  weights[dayEl] += 1;
-
-  // Reduce unfavorable element (the one that controls Day Master)
-  weights[EL_CONTROLLED_BY[dayEl]] *= 0.5;
+  let weights;
+  if (zwWeights) {
+    // 紫微斗数: wealth/fortune/career palace star brightness drives weights
+    weights = zwWeights;
+  } else {
+    // Fallback: 八字 five-element favorable element counting
+    weights = { Wood:1, Fire:1, Earth:1, Metal:1, Water:1 };
+    favEls.forEach(el => { if (el) weights[el] += 3; });
+    weights[dayEl] += 1;
+    weights[EL_CONTROLLED_BY[dayEl]] *= 0.5;
+  }
 
   // ── Today's pillar interactions (daily-changing influence) ──
   const todayDayEl   = todayDP.element;
@@ -1815,9 +1878,10 @@ function calculate() {
   const pillars = [yp, mp, dp, hp];
   const counts  = countElements(pillars);
 
-  currentPillars  = pillars;
-  currentElements = counts;
-  realignSeed     = 0;
+  currentPillars   = pillars;
+  currentElements  = counts;
+  currentBirthData = { y, m, d, hr };
+  realignSeed      = 0;
 
   if (name) {
     currentUserName = name;
