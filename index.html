@@ -44,6 +44,17 @@
       font-size: 16px; outline: none; transition: border-color 0.2s;
     }
     .input-field:focus { border-color: #00321f; }
+    .select-field {
+      width: 100%; background: #ecefea; border: none; border-bottom: 2px solid transparent;
+      border-radius: 8px 8px 0 0; padding: 12px 14px; font-family: 'Manrope', sans-serif;
+      font-size: 14px; outline: none; transition: border-color 0.2s; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath stroke='%23404944' stroke-width='1.5' fill='none' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      padding-right: 28px; color: #1a1c1a;
+    }
+    .select-field:focus { border-color: #00321f; }
+    .select-field option[value=""] { color: #9eaa9e; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .lang-btn { color: #404943; transition: all 0.2s; }
     .lang-btn.active { background: #004b31 !important; color: white; }
@@ -56,6 +67,13 @@
     .hx-anim { animation: hexReveal 0.4s ease forwards; opacity:0; transform-origin:left; }
     @keyframes resultFadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .result-anim { animation: resultFadeIn 0.6s ease forwards; opacity:0; }
+    @keyframes adSlideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+    #floatingAd {
+      position: fixed; top: 80px; right: 0; z-index: 40;
+      animation: adSlideIn 0.5s 1.5s ease forwards; opacity: 0;
+      display: none;
+    }
+    @media (min-width: 1280px) { #floatingAd { display: block; } }
   </style>
 </head>
 <body>
@@ -71,7 +89,92 @@
   </div>
 </nav>
 
+<!-- Floating Ad — 160×600 Wide Skyscraper (simulates injected programmatic / AdSense unit) -->
+<div id="floatingAd">
+  <!-- Publisher wrapper: what the site owner places on their page -->
+  <div style="position:relative;width:160px;">
 
+    <!-- "Ad" pill label — shown by publisher above the slot -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;padding:0 2px;">
+      <span style="font-size:9px;color:#9eaa9e;letter-spacing:.8px;text-transform:uppercase;font-family:sans-serif;">Ad</span>
+      <button onclick="document.getElementById('floatingAd').style.display='none'"
+              style="background:none;border:none;cursor:pointer;padding:0;line-height:1;color:#aaa;font-size:14px;" title="Close">✕</button>
+    </div>
+
+    <!-- ═══ Simulated AdSense iframe content ═══
+         This is what Google injects inside the <ins> block.
+         Border + white bg = standard AdSense display unit chrome. -->
+    <div style="width:160px;height:600px;border:1px solid #e0e0e0;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;" onclick="void(0)">
+
+      <!-- AdChoices icon — always top-right inside the iframe -->
+      <div title="AdChoices" style="position:absolute;top:4px;right:4px;z-index:9;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,0.85);border-radius:3px;padding:1px 3px;">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="4.5" fill="#1a73e8"/><text x="4.5" y="7" text-anchor="middle" fill="white" font-size="6.5" font-family="Arial" font-weight="bold">i</text></svg>
+        <span style="font-size:7px;color:#1a73e8;font-family:Arial;">AdChoices</span>
+      </div>
+
+      <!-- ── Ad Creative 1: OCBC Credit Card (top half) ── -->
+      <div style="flex:1;background:linear-gradient(160deg,#d63031 0%,#c0392b 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 10px;gap:8px;min-height:0;">
+        <!-- Brand wordmark -->
+        <div style="display:flex;align-items:center;gap:5px;">
+          <div style="width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <span style="color:#d63031;font-size:9px;font-weight:900;font-family:Arial;">OCBC</span>
+          </div>
+          <span style="color:white;font-size:10px;font-weight:700;font-family:Arial;letter-spacing:.5px;">BANK</span>
+        </div>
+        <!-- Card visual -->
+        <div style="width:120px;height:72px;background:linear-gradient(135deg,#e84393,#c0392b);border-radius:7px;box-shadow:0 6px 16px rgba(0,0,0,0.3);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.08);"></div>
+          <div style="position:absolute;bottom:-10px;left:-10px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.06);"></div>
+          <div style="position:absolute;bottom:8px;left:8px;">
+            <div style="width:22px;height:16px;background:#ffca44;border-radius:2px;opacity:0.9;"></div>
+          </div>
+          <div style="position:absolute;bottom:8px;right:8px;display:flex;gap:2px;">
+            <div style="width:14px;height:14px;border-radius:50%;background:#eb001b;opacity:0.9;"></div>
+            <div style="width:14px;height:14px;border-radius:50%;background:#f79e1b;opacity:0.9;margin-left:-6px;"></div>
+          </div>
+        </div>
+        <p style="color:white;font-size:12px;font-weight:800;font-family:Arial;text-align:center;line-height:1.3;margin:0;">Up to 8%<br/>Cash Rebate</p>
+        <p style="color:rgba(255,255,255,0.8);font-size:9px;font-family:Arial;text-align:center;line-height:1.4;margin:0;">On dining, groceries<br/>&amp; transport in SG</p>
+        <div style="background:white;color:#d63031;font-size:10px;font-weight:700;font-family:Arial;padding:5px 14px;border-radius:20px;">Apply Now</div>
+      </div>
+
+      <!-- Divider between 2 ad slots (AdSense often stacks 300×250 equivalents) -->
+      <div style="height:1px;background:#e0e0e0;flex-shrink:0;"></div>
+
+      <!-- ── Ad Creative 2: Shopee 10.10 Sale (bottom half) ── -->
+      <div style="flex:1;background:linear-gradient(160deg,#ee4d2d 0%,#ff7337 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;gap:7px;min-height:0;">
+        <!-- Shopee logo area -->
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:20px;height:20px;background:white;border-radius:4px;display:flex;align-items:center;justify-content:center;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#ee4d2d"><path d="M19 7h-1.5A5.5 5.5 0 0 0 6.5 7H5a2 2 0 0 0-2 2l1.5 11A2 2 0 0 0 6.5 22h11a2 2 0 0 0 2-2L21 9a2 2 0 0 0-2-2zm-7-3.5A3.5 3.5 0 0 1 15.5 7h-7A3.5 3.5 0 0 1 12 3.5z"/></svg>
+          </div>
+          <span style="color:white;font-size:11px;font-weight:800;font-family:Arial;letter-spacing:.3px;">Shopee</span>
+        </div>
+        <!-- Sale badge -->
+        <div style="background:#ffca44;border-radius:6px;padding:4px 10px;text-align:center;">
+          <p style="color:#c0392b;font-size:15px;font-weight:900;font-family:Arial;line-height:1;margin:0;">10.10</p>
+          <p style="color:#c0392b;font-size:8px;font-weight:700;font-family:Arial;letter-spacing:.5px;margin:0;">SUPER SALE</p>
+        </div>
+        <p style="color:white;font-size:11px;font-weight:700;font-family:Arial;text-align:center;line-height:1.4;margin:0;">Coins Cashback<br/>+ Free Shipping</p>
+        <!-- Fake product thumbnails -->
+        <div style="display:flex;gap:4px;">
+          <div style="width:30px;height:30px;background:rgba(255,255,255,0.25);border-radius:4px;"></div>
+          <div style="width:30px;height:30px;background:rgba(255,255,255,0.25);border-radius:4px;"></div>
+          <div style="width:30px;height:30px;background:rgba(255,255,255,0.25);border-radius:4px;"></div>
+        </div>
+        <div style="background:white;color:#ee4d2d;font-size:10px;font-weight:700;font-family:Arial;padding:5px 14px;border-radius:20px;">Shop Now</div>
+      </div>
+
+      <!-- AdSense footer chrome -->
+      <div style="height:16px;background:#fff;border-top:1px solid #e8e8e8;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;flex-shrink:0;">
+        <span style="font-size:8px;color:#999;font-family:Arial;">Ads by </span>
+        <svg style="margin-left:2px;" width="28" height="9" viewBox="0 0 60 20"><text y="14" font-size="14" font-family="Arial" fill="#4285f4" font-weight="bold">G</text><text x="10" y="14" font-size="14" font-family="Arial" fill="#ea4335" font-weight="bold">o</text><text x="19" y="14" font-size="14" font-family="Arial" fill="#fbbc04" font-weight="bold">o</text><text x="28" y="14" font-size="14" font-family="Arial" fill="#4285f4" font-weight="bold">g</text><text x="36" y="14" font-size="14" font-family="Arial" fill="#34a853" font-weight="bold">l</text><text x="42" y="14" font-size="14" font-family="Arial" fill="#ea4335" font-weight="bold">e</text></svg>
+      </div>
+    </div>
+    <!-- ═══ End simulated iframe ═══ -->
+
+  </div>
+</div>
 
 <!-- Main -->
 <main class="pt-16 min-h-screen">
@@ -104,7 +207,7 @@
         <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-6">
           <h3 class="font-headline text-xl font-bold text-[#00321f] flex items-center gap-2">
             <svg class="w-5 h-5 text-[#004b31]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-            <span data-i18n="form_title">Scholar's Input</span>
+            <span data-i18n="form_title">Input Your Birthday</span>
           </h3>
           <form id="baziForm" class="flex flex-col gap-5" onsubmit="return false;">
             <div class="flex flex-col gap-1.5">
@@ -113,13 +216,18 @@
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="form_dateLabel">Birth Date</label>
-              <input class="input-field" id="birthDate" type="date"/>
+              <div class="grid grid-cols-3 gap-2">
+                <select class="select-field" id="birthDay"></select>
+                <select class="select-field" id="birthMonth"></select>
+                <select class="select-field" id="birthYear"></select>
+              </div>
             </div>
             <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]">
-                <span data-i18n="form_timeLabel">Birth Time</span> <span class="normal-case font-normal opacity-60" data-i18n="form_optional">(optional)</span>
-              </label>
-              <input class="input-field" id="birthTime" type="time"/>
+              <label class="text-[11px] font-bold uppercase tracking-[1.1px] text-[#404944]" data-i18n="form_timeLabel">Birth Time</label>
+              <div class="grid grid-cols-2 gap-2">
+                <select class="select-field" id="birthHour"></select>
+                <select class="select-field" id="birthMinute"></select>
+              </div>
             </div>
             <div id="formError" class="hidden text-[#ba1a1a] text-sm font-medium bg-[#ffdad6] rounded-lg px-4 py-2"></div>
             <button class="w-full jade-grad-btn text-white py-4 rounded-xl font-bold text-[12px] uppercase tracking-[1.2px]
@@ -186,6 +294,23 @@
       <!-- Right Column -->
       <section class="lg:col-span-8 flex flex-col gap-8">
 
+        <!-- Sacred Manifestation -->
+        <div class="rounded-3xl p-1 jade-grad shadow-2xl">
+          <div class="bg-[rgba(0,50,31,0.92)] backdrop-blur-md rounded-[22px] p-10 relative overflow-hidden flex flex-col gap-10">
+            <div class="absolute top-[-48px] right-[-48px] w-64 h-64 rounded-full bg-[rgba(115,92,0,0.12)] blur-[40px] pointer-events-none"></div>
+            <div class="text-center relative z-10">
+              <h4 class="font-headline text-3xl font-bold text-[#e9c349]" data-i18n="manifest_title">Your TOTO Number Generator</h4>
+              <p class="text-[rgba(188,237,218,0.6)] text-[12px] uppercase tracking-[1.2px] mt-2" id="manifestSubtitle">
+                Generated from your Ba Zi chart
+              </p>
+            </div>
+            <div class="flex flex-col items-center gap-5 relative z-10" id="numbersDisplay">
+              <div class="flex flex-wrap justify-center gap-5" id="mainNumbers"></div>
+              <div class="flex items-end gap-5" id="bonusRow"></div>
+            </div>
+          </div>
+        </div>
+
         <!-- 偏财 Wealth Star Card -->
         <div class="rounded-3xl p-6 flex flex-col gap-4" id="biancaiCard">
           <div class="flex items-center gap-2">
@@ -227,38 +352,63 @@
           </div>
         </div>
 
-        <!-- Sacred Manifestation -->
-        <div class="rounded-3xl p-1 jade-grad shadow-2xl">
-          <div class="bg-[rgba(0,50,31,0.92)] backdrop-blur-md rounded-[22px] p-10 relative overflow-hidden flex flex-col gap-10">
-            <div class="absolute top-[-48px] right-[-48px] w-64 h-64 rounded-full bg-[rgba(115,92,0,0.12)] blur-[40px] pointer-events-none"></div>
-            <div class="text-center relative z-10">
-              <h4 class="font-headline text-3xl font-bold text-[#e9c349]" data-i18n="manifest_title">Sacred Manifestation</h4>
-              <p class="text-[rgba(188,237,218,0.6)] text-[12px] uppercase tracking-[1.2px] mt-2" id="manifestSubtitle">
-                Numerology sequence derived from the Five Elements
-              </p>
-            </div>
-            <div class="flex flex-col items-center gap-5 relative z-10" id="numbersDisplay">
-              <div class="flex flex-wrap justify-center gap-5" id="mainNumbers"></div>
-              <div class="flex items-end gap-5" id="bonusRow"></div>
-            </div>
-            <div class="flex justify-center relative z-10">
-              <button onclick="realign()"
-                      class="flex items-center gap-3 px-8 py-4 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)]
-                             hover:bg-[rgba(255,255,255,0.10)] rounded-full transition-all
-                             text-[#bcedda] text-sm font-semibold uppercase tracking-[1.4px]">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                <span data-i18n="manifest_realign">Re-align Elements</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
         <!-- Elemental Balance -->
         <div class="bg-[#f2f4ef] rounded-3xl p-8 flex flex-col gap-8">
           <h4 class="font-headline text-xl font-bold text-[#00321f]" data-i18n="elements_title">Elemental Balance</h4>
           <div class="flex flex-col gap-5" id="elementBars"></div>
         </div>
 
+        <!-- In-content Ad Unit: 300×250 Medium Rectangle (most common AdSense placement) -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <p style="font-size:9px;color:#9eaa9e;letter-spacing:.8px;text-transform:uppercase;font-family:sans-serif;align-self:flex-start;">Advertisement</p>
+          <!-- Simulated AdSense iframe: 300×250 -->
+          <div style="width:300px;height:250px;border:1px solid #e0e0e0;background:#fff;position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;">
+
+            <!-- AdChoices -->
+            <div style="position:absolute;top:4px;right:4px;z-index:9;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,0.9);border-radius:3px;padding:1px 4px;">
+              <svg width="9" height="9" viewBox="0 0 9 9"><circle cx="4.5" cy="4.5" r="4.5" fill="#1a73e8"/><text x="4.5" y="7" text-anchor="middle" fill="white" font-size="6.5" font-family="Arial" font-weight="bold">i</text></svg>
+              <span style="font-size:7px;color:#1a73e8;font-family:Arial;">AdChoices</span>
+            </div>
+
+            <!-- Ad creative: Grab Financial / GXS Bank style -->
+            <div style="flex:1;background:linear-gradient(135deg,#00b14f 0%,#007a38 100%);display:flex;align-items:center;padding:18px 20px;gap:16px;min-height:0;position:relative;overflow:hidden;">
+              <!-- BG decoration -->
+              <div style="position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.06);"></div>
+              <div style="position:absolute;right:20px;bottom:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
+              <!-- Left: brand + text -->
+              <div style="display:flex;flex-direction:column;gap:7px;flex:1;position:relative;z-index:1;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div style="width:32px;height:32px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#00b14f"><path d="M21 8H3m18 4H3m18 4H3M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+                  </div>
+                  <div>
+                    <p style="color:white;font-size:13px;font-weight:800;font-family:Arial;line-height:1;margin:0;">Grab</p>
+                    <p style="color:rgba(255,255,255,0.7);font-size:8px;font-family:Arial;letter-spacing:.5px;margin:0;">FINANCIAL</p>
+                  </div>
+                </div>
+                <p style="color:white;font-size:16px;font-weight:800;font-family:Arial;line-height:1.2;margin:0;">Earn 3.6%<br/>p.a. interest</p>
+                <p style="color:rgba(255,255,255,0.8);font-size:10px;font-family:Arial;line-height:1.4;margin:0;">No min. balance. No lock-in.<br/>Start saving smarter today.</p>
+                <div style="background:#ffe14d;color:#1a4d00;font-size:10px;font-weight:700;font-family:Arial;padding:6px 14px;border-radius:20px;width:fit-content;">Open Account →</div>
+              </div>
+              <!-- Right: phone mockup -->
+              <div style="width:70px;height:130px;background:rgba(255,255,255,0.12);border-radius:12px;border:2px solid rgba(255,255,255,0.2);flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:8px 6px;gap:5px;position:relative;z-index:1;">
+                <div style="width:20px;height:3px;background:rgba(255,255,255,0.4);border-radius:2px;"></div>
+                <div style="width:100%;flex:1;background:rgba(255,255,255,0.1);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;">
+                  <p style="color:rgba(255,255,255,0.5);font-size:7px;font-family:Arial;margin:0;">Balance</p>
+                  <p style="color:white;font-size:11px;font-weight:800;font-family:Arial;margin:0;">$12,480</p>
+                  <div style="width:80%;height:1px;background:rgba(255,255,255,0.2);"></div>
+                  <p style="color:#ffe14d;font-size:8px;font-weight:700;font-family:Arial;margin:0;">+3.6% p.a.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- AdSense footer -->
+            <div style="height:16px;background:#fff;border-top:1px solid #e8e8e8;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;flex-shrink:0;">
+              <span style="font-size:8px;color:#999;font-family:Arial;">Ads by </span>
+              <svg style="margin-left:2px;" width="28" height="9" viewBox="0 0 60 20"><text y="14" font-size="14" font-family="Arial" fill="#4285f4" font-weight="bold">G</text><text x="10" y="14" font-size="14" font-family="Arial" fill="#ea4335" font-weight="bold">o</text><text x="19" y="14" font-size="14" font-family="Arial" fill="#fbbc04" font-weight="bold">o</text><text x="28" y="14" font-size="14" font-family="Arial" fill="#4285f4" font-weight="bold">g</text><text x="36" y="14" font-size="14" font-family="Arial" fill="#34a853" font-weight="bold">l</text><text x="42" y="14" font-size="14" font-family="Arial" fill="#ea4335" font-weight="bold">e</text></svg>
+            </div>
+          </div>
+        </div>
 
       </section>
     </div>
@@ -268,16 +418,11 @@
 </main>
 
 <!-- Footer -->
-<footer class="bg-[#00321f] w-full pt-16 pb-8 px-12 mt-20 flex flex-col items-center gap-8">
+<footer class="bg-[#00321f] w-full pt-16 pb-8 px-12 mt-20 flex flex-col items-center gap-6">
   <div class="font-headline text-3xl font-bold text-white">LuckyPillar</div>
-  <div class="flex flex-wrap justify-center gap-8 text-sm">
-    <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_scholarPath">The Scholar's Path</a>
-    <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_privacy">Privacy Policy</a>
-    <a href="#" class="text-[#ffe088] underline underline-offset-4" data-i18n="footer_lunar">Lunar Calendar</a>
-    <a href="#" class="text-[rgba(188,237,218,0.7)] hover:text-white transition-colors" data-i18n="footer_terms">Terms of Service</a>
-  </div>
+  <p class="text-[rgba(188,237,218,0.65)] text-sm text-center max-w-md leading-relaxed" data-i18n="footer_tagline">A fun, light-hearted tool for entertainment purposes only. Numbers are generated from Ba Zi metaphysics — not financial advice. Please gamble responsibly.</p>
   <div class="w-full max-w-4xl h-px bg-[#004b31]"></div>
-  <p class="text-xs text-[rgba(188,237,218,0.5)]" data-i18n="footer_copyright">© 2024 Jade &amp; Prosperity Metaphysics. All Rights Reserved.</p>
+  <p class="text-xs text-[rgba(188,237,218,0.4)] text-center" data-i18n="footer_copyright">© 2026 LuckyPillar. All Rights Reserved.</p>
 </footer>
 
 <script>
@@ -294,14 +439,16 @@ const TRANSLATIONS = {
     hero_badge:'Singapore TOTO · Just For Fun',
     hero_title:'Try Your <span class="italic text-[#ffe088]">TOTO<br/>Luck</span>',
     hero_subtitle:'Enter your birth date and let your Ba Zi guide your numbers. A fun, light-hearted take on Singapore TOTO — not financial advice, just a little cosmic nudge.',
-    form_title:"Scholar's Input", form_nameLabel:'Full Name', form_namePlaceholder:'Enter name',
-    form_dateLabel:'Birth Date', form_timeLabel:'Birth Time', form_optional:'(optional)',
-    form_calcBtn:'Calculate Manifestation', form_errorDate:'Please enter your birth date to begin the calculation.',
+    form_title:'Input Your Birthday', form_nameLabel:'Full Name', form_namePlaceholder:'Enter name',
+    form_dateLabel:'Birth Date', form_timeLabel:'Birth Time',
+    form_calcBtn:'Calculate Manifestation', form_errorDate:'Please select your full birth date to continue.',
+    form_errorTime:'Please select your birth time to continue.',
     attr_luckyColor:'Lucky Color', attr_goldenHour:'Golden Hour', attr_direction:'Prosperous Direction',
     reading_title:"Master's Reading",
     bazi_title:'Ba Zi: The Four Pillars', bazi_dayMasterDash:'Day Master: — ',
-    manifest_title:'Sacred Manifestation', manifest_subtitle:'Numerology sequence derived from the Five Elements',
-    manifest_subtitleDynamic:'{yy} {el} Day Master · Numbers aligned with Five Element harmony',
+    manifest_title:'Your TOTO Number Generator', manifest_subtitle:'Generated from your Ba Zi chart',
+    manifest_subtitleDynamic:'{yy} {el} Day Master · Numbers generated from your Ba Zi chart',
+    manifest_emptyPrompt:'Enter your birthday above to generate your numbers',
     manifest_realign:'Re-align Elements', manifest_bonusLabel:'Bonus Number',
     elements_title:'Elemental Balance', dynamics_title:'Element Dynamics',
     dynamics_dayMaster:'Day Master', dynamics_favorable:'★ Favorable',
@@ -366,7 +513,8 @@ const TRANSLATIONS = {
     biancai_empty_prompt:'Enter your birth date above to reveal your wealth star forecast.',
     footer_scholarPath:"The Scholar's Path", footer_privacy:'Privacy Policy',
     footer_lunar:'Lunar Calendar', footer_terms:'Terms of Service',
-    footer_copyright:'© 2024 LuckyPillar. All Rights Reserved.',
+    footer_tagline:'A fun, light-hearted tool for entertainment purposes only. Numbers are generated from Ba Zi metaphysics — not financial advice. Please gamble responsibly.',
+    footer_copyright:'© 2026 LuckyPillar. All Rights Reserved.',
     // ── Meihua UI ──
     mh_banner_badge:'Song Dynasty Oracle', mh_banner_desc:'Created by Shao Kangjie, this oracle derives hexagrams from the primordial numbers, revealing fortune through the cycle of elemental generation and overcoming.',
     mh_heaven_earth:'Heaven & Earth',
@@ -504,14 +652,16 @@ const TRANSLATIONS = {
     hero_badge:'新加坡TOTO · 娱乐为主',
     hero_title:'试试您的<span class="italic text-[#ffe088]">TOTO<br/>运气</span>',
     hero_subtitle:'输入生日，让八字为您指引号码。轻松好玩的新加坡TOTO参考工具 —— 仅供娱乐，不构成任何投注建议。',
-    form_title:'学者录入', form_nameLabel:'全名', form_namePlaceholder:'请输入姓名',
-    form_dateLabel:'出生日期', form_timeLabel:'出生时间', form_optional:'(可选)',
-    form_calcBtn:'推算显化', form_errorDate:'请输入出生日期以开始推算。',
+    form_title:'输入您的生日', form_nameLabel:'全名', form_namePlaceholder:'请输入姓名',
+    form_dateLabel:'出生日期', form_timeLabel:'出生时间',
+    form_calcBtn:'推算显化', form_errorDate:'请选择完整出生日期以继续。',
+    form_errorTime:'请选择出生时间以继续。',
     attr_luckyColor:'幸运颜色', attr_goldenHour:'黄金时段', attr_direction:'旺财方位',
     reading_title:'大师解读',
     bazi_title:'八字：四柱', bazi_dayMasterDash:'日元：— ',
-    manifest_title:'神圣显化', manifest_subtitle:'源自五行的数字序列',
-    manifest_subtitleDynamic:'{yy}{el}日元 · 五行和谐数字序列',
+    manifest_title:'您的多多号码生成器', manifest_subtitle:'根据您的八字生成',
+    manifest_subtitleDynamic:'{yy}{el}日元 · 根据您的八字生成号码',
+    manifest_emptyPrompt:'请在上方输入您的生日以生成号码',
     manifest_realign:'重新对齐五行', manifest_bonusLabel:'特别号码',
     elements_title:'五行平衡', dynamics_title:'五行互动',
     dynamics_dayMaster:'日元', dynamics_favorable:'★ 旺',
@@ -576,7 +726,8 @@ const TRANSLATIONS = {
     biancai_empty_prompt:'请输入您的生日，查看专属财星预测。',
     footer_scholarPath:'学者之路', footer_privacy:'隐私政策',
     footer_lunar:'农历日历', footer_terms:'服务条款',
-    footer_copyright:'© 2024 LuckyPillar。版权所有。',
+    footer_tagline:'本工具仅供娱乐参考。号码基于八字玄学生成，不构成任何财务建议。请理性博彩。',
+    footer_copyright:'© 2026 LuckyPillar。版权所有。',
     // ── 梅花易数 UI (zh) ──
     mh_banner_badge:'宋朝易数', mh_banner_desc:'邵康节先生所创，以先天易数起卦，通过体用生克关系，洞察事物发展脉络，预测吉凶祸福。',
     mh_heaven_earth:'天 · 地',
@@ -708,14 +859,16 @@ const TRANSLATIONS = {
     hero_badge:'Singapore TOTO · Sekadar Hiburan',
     hero_title:'Cuba Nasib <span class="italic text-[#ffe088]">TOTO<br/>Anda</span>',
     hero_subtitle:'Masukkan tarikh lahir dan biarkan Ba Zi membimbing nombor anda. Cara seronok untuk TOTO Singapore — sekadar hiburan, bukan nasihat kewangan.',
-    form_title:'Input Sarjana', form_nameLabel:'Nama Penuh', form_namePlaceholder:'Masukkan nama',
-    form_dateLabel:'Tarikh Lahir', form_timeLabel:'Masa Lahir', form_optional:'(pilihan)',
-    form_calcBtn:'Kira Manifestasi', form_errorDate:'Sila masukkan tarikh lahir anda untuk memulakan pengiraan.',
+    form_title:'Masukkan Tarikh Lahir', form_nameLabel:'Nama Penuh', form_namePlaceholder:'Masukkan nama',
+    form_dateLabel:'Tarikh Lahir', form_timeLabel:'Masa Lahir',
+    form_calcBtn:'Kira Manifestasi', form_errorDate:'Sila pilih tarikh lahir penuh anda untuk meneruskan.',
+    form_errorTime:'Sila pilih masa lahir anda untuk meneruskan.',
     attr_luckyColor:'Warna Bertuah', attr_goldenHour:'Waktu Emas', attr_direction:'Arah Makmur',
     reading_title:'Bacaan Guru',
     bazi_title:'Ba Zi: Empat Tiang', bazi_dayMasterDash:'Hari Utama: — ',
-    manifest_title:'Manifestasi Suci', manifest_subtitle:'Urutan nombor dari Lima Elemen',
-    manifest_subtitleDynamic:'Hari Utama {yy} {el} · Urutan nombor Lima Elemen',
+    manifest_title:'Penjana Nombor TOTO Anda', manifest_subtitle:'Dijana daripada carta Ba Zi anda',
+    manifest_subtitleDynamic:'Tuan Hari {yy} {el} · Nombor dijana daripada carta Ba Zi anda',
+    manifest_emptyPrompt:'Masukkan tarikh lahir anda di atas untuk menjana nombor',
     manifest_realign:'Jajarkan Semula Elemen', manifest_bonusLabel:'Nombor Bonus',
     elements_title:'Keseimbangan Elemen', dynamics_title:'Dinamik Elemen',
     dynamics_dayMaster:'Hari Utama', dynamics_favorable:'★ Baik',
@@ -780,7 +933,8 @@ const TRANSLATIONS = {
     biancai_empty_prompt:'Masukkan tarikh lahir anda untuk mendedahkan ramalan bintang kekayaan.',
     footer_scholarPath:'Laluan Sarjana', footer_privacy:'Dasar Privasi',
     footer_lunar:'Kalendar Lunar', footer_terms:'Syarat Perkhidmatan',
-    footer_copyright:'© 2024 LuckyPillar. Hak Cipta Terpelihara.',
+    footer_tagline:'Alat hiburan semata-mata. Nombor dijana berdasarkan metafizik Ba Zi — bukan nasihat kewangan. Sila judi secara bertanggungjawab.',
+    footer_copyright:'© 2026 LuckyPillar. Hak Cipta Terpelihara.',
     // ── Meihua UI (ms) ──
     mh_banner_badge:'Oracle Dinasti Song', mh_banner_desc:'Dicipta oleh Shao Kangjie, oracle ini menerbit heksagram dari nombor primordial, mendedahkan nasib melalui kitaran elemen.',
     mh_heaven_earth:'Langit & Bumi',
@@ -1487,6 +1641,7 @@ function renderPillars(pillars) {
 function renderNumbers(nums) {
   const mainDiv  = document.getElementById('mainNumbers');
   const bonusDiv = document.getElementById('bonusRow');
+  document.getElementById('numbersDisplay').querySelector('.empty-prompt')?.remove();
   const main5 = nums.main.slice(0, 5);
   const main6 = nums.main[5];
   mainDiv.innerHTML = main5.map((n, i) => `
@@ -1585,6 +1740,38 @@ function updateSubtitle(pillars) {
     + '  ·  ' + dateStr + ' ' + todayDP.stem + todayDP.branch;
 }
 
+function renderNumbersEmpty() {
+  const mainDiv  = document.getElementById('mainNumbers');
+  const bonusDiv = document.getElementById('bonusRow');
+  mainDiv.innerHTML = Array.from({length: 5}).map(() => `
+    <div class="w-20 h-20 rounded-full border-2 border-[rgba(255,224,136,0.25)] flex items-center justify-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-[rgba(115,92,0,0.08)]"></div>
+      <span class="relative font-headline text-3xl font-bold text-[rgba(255,224,136,0.25)]">??</span>
+    </div>
+  `).join('');
+  bonusDiv.innerHTML = `
+    <div class="w-20 h-20 rounded-full border-2 border-[rgba(255,224,136,0.25)] flex items-center justify-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-[rgba(115,92,0,0.08)]"></div>
+      <span class="relative font-headline text-3xl font-bold text-[rgba(255,224,136,0.25)]">??</span>
+    </div>
+    <div class="relative flex flex-col items-center">
+      <p class="font-body text-[9px] font-bold text-[rgba(255,224,136,0.3)] uppercase tracking-[0.9px] mb-2 whitespace-nowrap">${t('manifest_bonusLabel')}</p>
+      <div class="w-20 h-20 rounded-full border-2 border-dashed border-[rgba(255,224,136,0.25)] flex items-center justify-center">
+        <span class="font-headline text-3xl font-black text-[rgba(255,224,136,0.25)]">??</span>
+      </div>
+    </div>
+  `;
+  // prompt message
+  const numbersDisplay = document.getElementById('numbersDisplay');
+  let prompt = numbersDisplay.querySelector('.empty-prompt');
+  if (!prompt) {
+    prompt = document.createElement('p');
+    prompt.className = 'empty-prompt text-[rgba(188,237,218,0.45)] text-[11px] uppercase tracking-[1.2px] text-center';
+    numbersDisplay.appendChild(prompt);
+  }
+  prompt.textContent = t('manifest_emptyPrompt');
+}
+
 function renderInitial() {
   const p0 = pillar(8, 4); const p1 = pillar(0, 4);
   const p2 = pillar(4, 6); const p3 = pillar(6, 8);
@@ -1592,26 +1779,33 @@ function renderInitial() {
   const counts = countElements(pils);
   renderPillars(pils);
   renderElements(counts);
-  renderNumbers(luckyNumbers(pils, counts));
+  renderNumbersEmpty();
   renderLuckyAttributes(pils, counts);
 }
 
 function calculate() {
-  const dateStr = document.getElementById('birthDate').value;
-  const timeStr = document.getElementById('birthTime').value;
+  const dayVal  = document.getElementById('birthDay').value;
+  const monVal  = document.getElementById('birthMonth').value;
+  const yearVal = document.getElementById('birthYear').value;
+  const hrVal   = document.getElementById('birthHour').value;
+  const minVal  = document.getElementById('birthMinute').value;
   const name    = document.getElementById('nameInput').value.trim();
   const errDiv  = document.getElementById('formError');
 
-  if (!dateStr) {
+  if (!dayVal || !monVal || !yearVal) {
     errDiv.textContent = t('form_errorDate');
+    errDiv.classList.remove('hidden');
+    return;
+  }
+  if (hrVal === '' || minVal === '') {
+    errDiv.textContent = t('form_errorTime');
     errDiv.classList.remove('hidden');
     return;
   }
   errDiv.classList.add('hidden');
 
-  const [y, m, d] = dateStr.split('-').map(Number);
-  let hr = 0, min = 0;
-  if (timeStr) { [hr, min] = timeStr.split(':').map(Number); }
+  const y = +yearVal, m = +monVal, d = +dayVal;
+  const hr = +hrVal, min = +minVal;
 
   const bz = getBaZi(y, m, d, hr, min);
   const yp = bz.year;
@@ -1659,7 +1853,34 @@ function realign() {
   renderNumbers(luckyNumbers(currentPillars, currentElements));
 }
 
+function initDateTimeSelects() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dayEl   = document.getElementById('birthDay');
+  const monEl   = document.getElementById('birthMonth');
+  const yearEl  = document.getElementById('birthYear');
+  const hourEl  = document.getElementById('birthHour');
+  const minEl   = document.getElementById('birthMinute');
+
+  dayEl.innerHTML  = '<option value="">DD</option>' +
+    Array.from({length:31}, (_,i) => `<option value="${i+1}">${String(i+1).padStart(2,'0')}</option>`).join('');
+
+  monEl.innerHTML  = '<option value="">MMM</option>' +
+    months.map((m,i) => `<option value="${i+1}">${m}</option>`).join('');
+
+  const thisYear = new Date().getFullYear();
+  yearEl.innerHTML = '<option value="">YYYY</option>' +
+    Array.from({length: thisYear - 1919}, (_,i) => thisYear - i)
+      .map(y => `<option value="${y}">${y}</option>`).join('');
+
+  hourEl.innerHTML = '<option value="">HH</option>' +
+    Array.from({length:24}, (_,i) => `<option value="${i}">${String(i).padStart(2,'0')}</option>`).join('');
+
+  minEl.innerHTML  = '<option value="">MM</option>' +
+    Array.from({length:60}, (_,i) => `<option value="${i}">${String(i).padStart(2,'0')}</option>`).join('');
+}
+
 // Boot
+initDateTimeSelects();
 setLang('en');
 renderBiancaiEmpty();
 
