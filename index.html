@@ -199,11 +199,11 @@
       </div>
     </section>
 
-    <!-- Content Grid -->
+    <!-- Content Grid — 4 sections for independent mobile ordering -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-      <!-- Left Column -->
-      <section class="lg:col-span-4 flex flex-col gap-8">
+      <!-- A: Form — mobile order 1 | desktop col 1-4 row 1 -->
+      <section class="order-1 lg:order-none lg:col-start-1 lg:col-span-4 lg:row-start-1 flex flex-col gap-8">
 
         <!-- Form -->
         <div class="bg-white rounded-3xl border border-[rgba(191,201,194,0.15)] p-8 flex flex-col gap-6">
@@ -240,6 +240,11 @@
             </button>
           </form>
         </div>
+
+      </section>
+
+      <!-- C: Luck Attrs + Master + Ba Zi — mobile order 3 | desktop col 1-4 row 2 -->
+      <section class="order-3 lg:order-none lg:col-start-1 lg:col-span-4 lg:row-start-2 flex flex-col gap-8">
 
         <!-- Luck Attribute Cards -->
         <div class="flex flex-col gap-4">
@@ -293,8 +298,8 @@
 
       </section>
 
-      <!-- Right Column -->
-      <section class="lg:col-span-8 flex flex-col gap-8">
+      <!-- B: TOTO + Wealth — mobile order 2 | desktop col 5-12 row 1 -->
+      <section class="order-2 lg:order-none lg:col-start-5 lg:col-span-8 lg:row-start-1 flex flex-col gap-8">
 
         <!-- Sacred Manifestation -->
         <div class="rounded-3xl p-1 jade-grad shadow-2xl">
@@ -353,6 +358,11 @@
             <div id="biancaiNextList" class="flex flex-col gap-2"></div>
           </div>
         </div>
+
+      </section>
+
+      <!-- D: Elemental + Ad — mobile order 4 | desktop col 5-12 row 2 -->
+      <section class="order-4 lg:order-none lg:col-start-5 lg:col-span-8 lg:row-start-2 flex flex-col gap-8">
 
         <!-- Elemental Balance -->
         <div class="bg-[#f2f4ef] rounded-3xl p-8 flex flex-col gap-8">
@@ -1835,15 +1845,57 @@ function renderNumbersEmpty() {
   prompt.textContent = t('manifest_emptyPrompt');
 }
 
+function renderPillarsEmpty() {
+  const labels = [t('pillar_year'), t('pillar_month'), t('pillar_day'), t('pillar_hour')];
+  document.getElementById('pillarsGrid').innerHTML = labels.map(label => `
+    <div class="flex flex-col gap-3">
+      <p class="text-[10px] font-extrabold uppercase tracking-[1px] text-[rgba(64,73,68,0.4)] text-center">${label}</p>
+      <div class="rounded-2xl py-5 px-1 flex flex-col items-center gap-2 border border-[rgba(0,50,31,0.04)]" style="background:#f2f4ef">
+        <div class="leading-none text-[rgba(0,0,0,0.15)]" style="font-size:2rem">—</div>
+        <span class="text-[9px] font-bold text-[rgba(0,0,0,0.18)]">· · ·</span>
+        <span class="text-[10px] font-bold rounded-full px-2 py-0.5 bg-[rgba(0,0,0,0.06)] text-[rgba(0,0,0,0.2)]">···</span>
+      </div>
+      <div class="bg-[#ecefea] rounded-2xl py-5 px-1 flex flex-col items-center gap-2">
+        <div class="leading-none text-[rgba(0,0,0,0.15)]" style="font-size:2rem">—</div>
+        <span class="text-[9px] font-bold text-[rgba(0,0,0,0.18)]">· · ·</span>
+        <span class="text-[10px] font-bold text-[rgba(0,0,0,0.2)]">—</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderElementsEmpty() {
+  document.getElementById('elementBars').innerHTML = EL_ORDER.map(el => `
+    <div class="flex flex-col gap-2">
+      <div class="flex justify-between text-[11px] font-bold uppercase tracking-[1.1px] text-[rgba(64,73,68,0.35)]">
+        <span>${EL_EMOJI[el]} ${t('el_'+el)}</span>
+        <span>—</span>
+      </div>
+      <div class="h-3 w-full bg-white rounded-full overflow-hidden">
+        <div class="h-full rounded-full" style="background:rgba(0,0,0,0.07); width:100%"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderLuckyAttributesEmpty() {
+  const card = document.getElementById('colorCard');
+  card.style.background = '#ecefea';
+  card.style.transition  = '';
+  document.getElementById('colorLabel').style.color   = '#9eaa9e';
+  document.getElementById('colorLabel').style.opacity = '1';
+  document.getElementById('colorValue').textContent   = '—';
+  document.getElementById('colorValue').style.color   = '#c8ccc7';
+  document.getElementById('colorIcon').style.background = '#c8ccc7';
+  document.getElementById('goldenHour').textContent = '— : —';
+  document.getElementById('luckyDir').textContent   = '—';
+}
+
 function renderInitial() {
-  const p0 = pillar(8, 4); const p1 = pillar(0, 4);
-  const p2 = pillar(4, 6); const p3 = pillar(6, 8);
-  const pils = [p0, p1, p2, p3];
-  const counts = countElements(pils);
-  renderPillars(pils);
-  renderElements(counts);
+  renderPillarsEmpty();
+  renderElementsEmpty();
   renderNumbersEmpty();
-  renderLuckyAttributes(pils, counts);
+  renderLuckyAttributesEmpty();
 }
 
 function calculate() {
